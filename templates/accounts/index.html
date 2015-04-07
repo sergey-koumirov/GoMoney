@@ -1,0 +1,10 @@
+<h1>Accounts List</h1>
+
+<table>
+    {{ range .}}
+        <tr>
+            <td><a href="/accounts/{{.ID}}">{{.ID}}</a></td>
+            <td><a href="/accounts/{{.ID}}">{{.Name}}</a></td>
+        </tr>
+    {{ end }}
+</table>

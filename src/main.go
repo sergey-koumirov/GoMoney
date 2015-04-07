@@ -3,6 +3,7 @@ package main
 import(
     "github.com/go-martini/martini"
     "github.com/martini-contrib/render"
+    "github.com/martini-contrib/binding"
 
     "github.com/jinzhu/gorm"
     _ "github.com/mattn/go-sqlite3"
@@ -10,6 +11,7 @@ import(
     "fmt"
 
     "controllers"
+    "models"
 )
 
 func main() {
@@ -34,10 +36,11 @@ func main() {
     //*** ROUTES ***
     m.Get("/accounts", controllers.GetAccounts)
     m.Group("/accounts", func(r martini.Router) {
+        r.Get("/new", controllers.NewAccount)
+        r.Post("/create", binding.Bind(models.Account{}), controllers.CreateAccount)
+        r.Post("/update/:id", binding.Bind(models.Account{}), controllers.UpdateAccount)
+        r.Get("/delete/:id", controllers.DeleteAccount)
         r.Get("/:id", controllers.GetAccount)
-        r.Post("/new", controllers.NewAccount)
-        r.Put("/update/:id", controllers.UpdateAccount)
-        r.Delete("/delete/:id", controllers.DeleteAccount)
     })
 
 

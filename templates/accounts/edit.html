@@ -1,2 +1,9 @@
-<h1><a href="/accounts">Accounts List</a> &gt; {{.Name}} </h1>
+<h3><a href="/accounts">Accounts List</a> &gt; {{.Name}} </h3>
 
+<form action="/accounts/update/{{.ID}}" method="POST">
+
+	{{template "account_fields" .}}
+
+	<input type="submit" value="Update"/>
+
+</form>

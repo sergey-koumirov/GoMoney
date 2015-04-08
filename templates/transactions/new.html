@@ -1,0 +1,11 @@
+{{template "transaction_scripts" .}}
+
+<h3><a href="/transactions">Transactions</a> &gt; New </h3>
+
+<form action="/transactions/create" method="POST">
+
+    {{template "transaction_fields" .}}
+
+    <input type="submit" value="Create"/>
+
+</form>

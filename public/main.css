@@ -19,22 +19,26 @@ li {
     display: inline;
 }
 
-table, td{
-    border-color: #600;
+table.list, td{
+    border-color: #8C8;
     border-style: solid;
 }
 
-table{
+table.list{
     border-width: 0 0 1px 1px;
     border-spacing: 0;
     border-collapse: collapse;
 }
 
-td{
+table.list td{
     margin: 0;
     padding: 4px;
     border-width: 1px 1px 0 0;
     background-color: #CFC;
+}
+
+table.list td.money{
+    text-align: right;
 }
 
 
@@ -64,7 +68,7 @@ form label {
 	text-align: right;
 }
 
-form input, form textarea {
+form input, form textarea, form select {
 	/* display: inline; inline display must not be set or will hide submit buttons in IE 5x mac */
 	width:auto;      /* set width of form elements to auto-size, otherwise watch for wrap on resize */
 	margin:5px 0 0 10px; /* set margin on left of form elements rather than right of

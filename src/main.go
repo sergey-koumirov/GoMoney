@@ -52,6 +52,14 @@ func main() {
         r.Get("/:id", controllers.GetCurrency)
     })
 
+    m.Get("/transactions", controllers.GetTransactions)
+    m.Group("/transactions", func(r martini.Router) {
+        r.Get("/new", controllers.NewTransaction)
+        r.Post("/create", binding.Bind(models.Transaction{}), controllers.CreateTransaction)
+        r.Post("/update/:id", binding.Bind(models.Transaction{}), controllers.UpdateTransaction)
+        r.Get("/delete/:id", controllers.DeleteTransaction)
+        r.Get("/:id", controllers.GetTransaction)
+    })
 
     m.RunOnAddr(":7000")
 

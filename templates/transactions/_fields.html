@@ -1,0 +1,49 @@
+{{define "transaction_scripts"}}
+    <script>
+        $(function() {
+            $( "#date" ).datepicker({
+                dateFormat: "yy-mm-dd",
+                firstDay: 1
+            });
+        });
+    </script>
+{{end}}
+
+{{define "transaction_fields"}}
+<fieldset>
+
+    <label for="date">Date</label>
+    <input type="text" id="date" name="Date" value="{{.T.Date}}"/>
+
+    <br/>
+
+    <label for="account_from_id">From</label>
+    <select id="account_from_id" name="AccountFromID">
+        <option>---</option>
+        {{range .AccountList}}
+            <option {{if eq .ID $.T.AccountFromID }}selected{{end}} value="{{.ID}}">{{.Name}}</option>
+        {{end}}
+    </select>
+
+    <br/>
+
+    <label for="account_to_id">To</label>
+    <select id="account_to_id" name="AccountToID">
+        <option>---</option>
+        {{range .AccountList}}
+            <option {{if eq .ID $.T.AccountToID }}selected{{end}} value="{{.ID}}">{{.Name}}</option>
+        {{end}}
+    </select>
+
+    <br/>
+
+    <label for="amount">Amount</label>
+    <input type="number" id="amount" name="Amount" value="{{.T.AmountAsFloat}}" step="0.01"/>
+
+    <br/>
+
+    <label for="comment">Comment</label>
+    <textarea id="comment" name="Comment" cols="40" rows="4">{{.T.Comment}}</textarea>
+
+</fieldset>
+{{end}}

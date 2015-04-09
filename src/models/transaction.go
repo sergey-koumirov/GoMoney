@@ -7,7 +7,9 @@ import (
 
 type Transaction struct {
     ID int64             `form:"ID"`
+    AccountFrom   Account
     AccountFromID int64  `form:"AccountFromID"`
+    AccountTo     Account
     AccountToID   int64  `form:"AccountToID"`
     Date          string `form:"Date"`
     Amount        int64

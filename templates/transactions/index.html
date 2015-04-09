@@ -4,9 +4,10 @@
     {{ range .}}
         <tr>
             <td><a href="/transactions/{{.ID}}">{{.Date}}</a></td>
-            <td><a href="/transactions/{{.ID}}">{{.AccountFromID}}</a></td>
-            <td><a href="/transactions/{{.ID}}">{{.AccountToID}}</a></td>
+            <td><a href="/transactions/{{.ID}}">{{.AccountFrom.Name}}</a></td>
             <td class="money">{{.AmountAsMoney}}</td>
+
+            <td><a href="/transactions/{{.ID}}">{{.AccountTo.Name}}</a></td>
             <td>{{.Comment}}</td>
             <td><a href="/transactions/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
         </tr>

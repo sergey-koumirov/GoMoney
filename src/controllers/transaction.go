@@ -12,7 +12,7 @@ import (
 
 func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
     var transactions []models.Transaction
-    db.Order("id desc").Find(&transactions)
+    db.Preload("AccountFrom").Preload("AccountTo").Order("id desc").Find(&transactions)
     r.HTML(200, "transactions/index", transactions)
 }
 

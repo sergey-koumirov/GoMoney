@@ -1,6 +1,16 @@
 {{define "account_fields"}}
 <fieldset>
     <label for="account_name">Name</label>
-    <input type="text" id="account_name" name="Name" value="{{.Name}}"/>
+    <input type="text" id="account_name" name="Name" value="{{.A.Name}}"/>
+    <br/>
+
+    <label for="currency_id">Currency</label>
+    <select id="currency_id" name="CurrencyID">
+        <option>---</option>
+        {{range .CurrencyList}}
+            <option {{if eq .ID $.A.CurrencyID }}selected{{end}} value="{{.ID}}">{{.Code}}</option>
+        {{end}}
+    </select>
+
 </fieldset>
 {{end}}

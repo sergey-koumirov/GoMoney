@@ -3,11 +3,13 @@ package models
 type Account struct {
     ID int64    `form:"ID"`
     Name string `form:"Name"`
-	CurrencyID string `form:"CurrencyID"`
+
+	Currency Currency
+	CurrencyID int64 `form:"CurrencyID"`
 }
 
 type AccountForm struct {
-	T Account
+	A Account
 	CurrencyList []Currency
 }
 

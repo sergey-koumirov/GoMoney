@@ -13,7 +13,7 @@ import (
 func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
     var transactions []models.Transaction
     db.Preload("AccountFrom").Preload("AccountTo").Order("id desc").Find(&transactions)
-    r.HTML(200, "transactions/index", transactions)
+    r.HTML(200, "transactions/index", models.TransactionsIndex{T: transactions, Rests: models.BalanceRest(db)})
 }
 
 func GetTransaction(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){

@@ -4,7 +4,7 @@
 <br/>
 <br/>
 <table id="transactions" class="list">
-    {{ range .}}
+    {{ range .T}}
         <tr>
             <td><a href="/transactions/{{.ID}}">{{.Date}}</a></td>
             <td><a href="/transactions/{{.ID}}">{{.AccountFrom.Name}}</a></td>
@@ -18,7 +18,7 @@
 </table>
 
 <table id="rests" class="list">
-    <tr><td>Кошелек</td><td class="money">10 000.00</td></tr>
-    <tr><td>Сбербанк</td><td class="money">100.00</td></tr>
-    <tr><td>Карта Первобанк</td><td class="money">10.00</td></tr>
+    {{ range .Rests}}
+    <tr><td>{{.AccountName}}</td><td class="money">{{.AmountAsMoney}}</td></tr>
+    {{ end }}
 </table>

@@ -24,6 +24,10 @@ type TransactionForm struct {
     AccountList []Account
 }
 
+type TransactionsIndex struct {
+    T []Transaction
+    Rests []AccountRest
+}
 
 func (t *Transaction) ParseMoney() {
     fAmountFrom, _ := strconv.ParseFloat(t.AmountFromStr, 64)
@@ -45,11 +49,11 @@ func (t Transaction) AmountToAsFloat() float64{
 }
 
 func (t Transaction) AmountFromAsMoney() string{
-    return utils.RenderFloat( "#,###.##", t.AmountFromAsFloat() )
+    return utils.RenderFloat( "# ###.##", t.AmountFromAsFloat() )
 }
 
 func (t Transaction) AmountToAsMoney() string{
-    return utils.RenderFloat( "#,###.##", t.AmountToAsFloat() )
+    return utils.RenderFloat( "# ###.##", t.AmountToAsFloat() )
 }
 
 

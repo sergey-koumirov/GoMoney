@@ -1,7 +1,6 @@
 package models
 import (
     "strconv"
-    "fmt"
     "utils"
 )
 
@@ -12,8 +11,10 @@ type Transaction struct {
     AccountTo     Account
     AccountToID   int64  `form:"AccountToID"`
     Date          string `form:"Date"`
-    Amount        int64
-    AmountStr     string `form:"Amount" sql:"-"`
+    AmountFrom    int64
+    AmountFromStr string `form:"AmountFrom" sql:"-"`
+    AmountTo      int64
+    AmountToStr   string `form:"AmountTo" sql:"-"`
     Comment       string `form:"Comment"`
 }
 
@@ -24,18 +25,31 @@ type TransactionForm struct {
 }
 
 
-func (t *Transaction) ParseAmount() {
-    fAmount, _ := strconv.ParseFloat(t.AmountStr, 64)
-    t.Amount = int64( fAmount * 100 )
-    fmt.Println(t)
+func (t *Transaction) ParseMoney() {
+    fAmountFrom, _ := strconv.ParseFloat(t.AmountFromStr, 64)
+    t.AmountFrom = int64( fAmountFrom * 100 )
+
+    fAmountTo, _ := strconv.ParseFloat(t.AmountToStr, 64)
+    if fAmountTo == 0 {
+        fAmountTo = fAmountFrom
+    }
+    t.AmountTo = int64( fAmountTo * 100 )
 }
 
-func (t Transaction) AmountAsFloat() float64{
-    return float64(t.Amount) / 100.0
+func (t Transaction) AmountFromAsFloat() float64{
+    return float64(t.AmountFrom) / 100.0
 }
 
-func (t Transaction) AmountAsMoney() string{
-    return utils.RenderFloat( "#,###.##", t.AmountAsFloat() )
+func (t Transaction) AmountToAsFloat() float64{
+    return float64(t.AmountTo) / 100.0
+}
+
+func (t Transaction) AmountFromAsMoney() string{
+    return utils.RenderFloat( "#,###.##", t.AmountFromAsFloat() )
+}
+
+func (t Transaction) AmountToAsMoney() string{
+    return utils.RenderFloat( "#,###.##", t.AmountToAsFloat() )
 }
 
 

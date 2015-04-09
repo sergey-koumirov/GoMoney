@@ -34,6 +34,8 @@ func main() {
     }))
 
     //*** ROUTES ***
+    m.Get("/", controllers.GetTransactions)
+
     m.Get("/accounts", controllers.GetAccounts)
     m.Group("/accounts", func(r martini.Router) {
         r.Get("/new", controllers.NewAccount)

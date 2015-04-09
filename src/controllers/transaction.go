@@ -41,14 +41,14 @@ func NewTransaction(db *gorm.DB, params martini.Params, req *http.Request, r ren
 }
 
 func CreateTransaction(transaction models.Transaction, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    transaction.ParseAmount()
+    transaction.ParseMoney()
     db.Create(&transaction)
     r.Redirect("/transactions")
 }
 
 func UpdateTransaction(transaction models.Transaction, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
     transaction.ID, _ = strconv.ParseInt(params["id"], 10, 64)
-    transaction.ParseAmount()
+    transaction.ParseMoney()
     db.Save(transaction)
     r.Redirect("/transactions")
 }

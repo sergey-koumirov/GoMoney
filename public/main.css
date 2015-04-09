@@ -99,3 +99,11 @@ input:read-only{
     background-color: #EEE;
     border:1px solid #000;
 }
+
+#rests{
+    float: right;
+}
+
+#transactions{
+    float: left;
+}

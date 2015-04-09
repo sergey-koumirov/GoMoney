@@ -2,6 +2,7 @@
 <fieldset>
     <label for="account_name">Name</label>
     <input type="text" id="account_name" name="Name" value="{{.A.Name}}"/>
+
     <br/>
 
     <label for="currency_id">Currency</label>
@@ -10,6 +11,16 @@
         {{range .CurrencyList}}
             <option {{if eq .ID $.A.CurrencyID }}selected{{end}} value="{{.ID}}">{{.Code}}</option>
         {{end}}
+    </select>
+
+    <br/>
+
+    <label for="type">Type</label>
+    <select id="type" name="Type">
+        <option>---</option>
+        <option {{if eq .A.Type "E" }}selected{{end}} value="E">Expense</option>
+        <option {{if eq .A.Type "I" }}selected{{end}} value="I">Income</option>
+        <option {{if eq .A.Type "B" }}selected{{end}} value="B">Balance</option>
     </select>
 
 </fieldset>

@@ -3,19 +3,32 @@
 <a href="/transactions/new">New</a>
 <br/>
 <br/>
-<table id="transactions" class="list">
-    {{ range .T}}
-        <tr>
-            <td><a href="/transactions/{{.ID}}">{{.Date}}</a></td>
-            <td><a href="/transactions/{{.ID}}">{{.AccountFrom.Name}}</a></td>
-            <td class="money">{{money .AmountFrom}}</td>
+<div>
+    <table id="transactions" class="list">
+        {{ range .T}}
+            <tr>
+                <td><a href="/transactions/{{.ID}}">{{.Date}}</a></td>
+                <td><a href="/transactions/{{.ID}}">{{.AccountFrom.Name}}</a></td>
+                <td class="money">{{money .AmountFrom}}</td>
 
-            <td><a href="/transactions/{{.ID}}">{{.AccountTo.Name}}</a></td>
-            <td>{{.Comment}}</td>
-            <td><a href="/transactions/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
+                <td><a href="/transactions/{{.ID}}">{{.AccountTo.Name}}</a></td>
+                <td>{{.Comment}}</td>
+                <td><a href="/transactions/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
+            </tr>
+        {{ end }}
+        <tr>
+            <td colspan="6">
+                {{ range $i, $v := .TotalPages}}
+                    {{if eq $i $.Page }}
+                        {{$i}}
+                    {{else}}
+                        <a href="/transactions?page={{$i}}">{{$i}}</a>
+                    {{end}}
+                {{ end }}
+            </td>
         </tr>
-    {{ end }}
-</table>
+    </table>
+</div>
 
 <div class="info">
     <table id="rests" class="list">

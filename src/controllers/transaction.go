@@ -9,13 +9,23 @@ import (
     "strconv"
     "time"
     "github.com/jinzhu/now"
+    "math"
 )
 
+const PER_PAGE = 5
+
 func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
+
+    currentPage, _ := strconv.ParseInt( req.URL.Query().Get("page"), 10, 64)
+    var totalRecords int64
+    db.Model(models.Transaction{}).Count(&totalRecords)
+
     var transactions []models.Transaction
-    db.Preload("AccountFrom").Preload("AccountTo").Order("date desc, id desc").Find(&transactions)
+    db.Preload("AccountFrom").Preload("AccountTo").Order("date desc, id desc").Offset(currentPage*PER_PAGE).Limit(PER_PAGE).Find(&transactions)
 
     pt := now.New( time.Now().AddDate(0,-1,0) )
+
+    totalPages := int64( math.Ceil( float64(totalRecords) / float64(PER_PAGE) ) )
 
     r.HTML(
       200, "transactions/index",
@@ -30,6 +40,9 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
 
           CurrentMonth: time.Now().Month().String(),
           PreviousMonth: (time.Now().Month()-1).String(),
+
+          Page: currentPage,
+          TotalPages: make([]byte, totalPages),
       },
     );
 }

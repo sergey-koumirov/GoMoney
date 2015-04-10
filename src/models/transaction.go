@@ -32,6 +32,9 @@ type TransactionsIndex struct {
     PreviousExpense AccountsInfo
     CurrentMonth string
     PreviousMonth string
+
+    Page int64
+    TotalPages []byte
 }
 
 func (t *Transaction) ParseMoney() {

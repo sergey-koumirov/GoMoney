@@ -192,3 +192,11 @@ func RenderFloat(format string, n float64) string {
 func RenderInteger(format string, n int) string {
     return RenderFloat(format, float64(n))
 }
+
+func RenderMoney(n int64) string {
+    return RenderFloat( "# ###.##", float64(n) / 100.0 )
+}
+
+func MoneyAsFloat(n int64) float64 {
+    return float64(n) / 100.0
+}

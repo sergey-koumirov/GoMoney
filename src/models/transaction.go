@@ -1,7 +1,6 @@
 package models
 import (
     "strconv"
-    "utils"
 )
 
 type Transaction struct {
@@ -26,7 +25,9 @@ type TransactionForm struct {
 
 type TransactionsIndex struct {
     T []Transaction
-    Rests []AccountRest
+    Rests AccountsInfo
+    CurrentMonth string
+    PreviousMonth string
 }
 
 func (t *Transaction) ParseMoney() {
@@ -39,21 +40,3 @@ func (t *Transaction) ParseMoney() {
     }
     t.AmountTo = int64( fAmountTo * 100 )
 }
-
-func (t Transaction) AmountFromAsFloat() float64{
-    return float64(t.AmountFrom) / 100.0
-}
-
-func (t Transaction) AmountToAsFloat() float64{
-    return float64(t.AmountTo) / 100.0
-}
-
-func (t Transaction) AmountFromAsMoney() string{
-    return utils.RenderFloat( "# ###.##", t.AmountFromAsFloat() )
-}
-
-func (t Transaction) AmountToAsMoney() string{
-    return utils.RenderFloat( "# ###.##", t.AmountToAsFloat() )
-}
-
-

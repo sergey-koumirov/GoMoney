@@ -19,25 +19,28 @@ li {
     display: inline;
 }
 
-table.list, td{
+table.list, td, th{
     border-color: #8C8;
     border-style: solid;
+    border-width: 1px;
 }
 
 table.list{
     border-width: 0 0 1px 1px;
     border-spacing: 0;
     border-collapse: collapse;
+    margin-bottom: 8px;
+    display: inline;
 }
 
-table.list td{
+table.list td, table.list th{
     margin: 0;
     padding: 4px;
     border-width: 1px 1px 0 0;
     background-color: #CFC;
 }
 
-table.list td.money{
+table.list .money{
     text-align: right;
 }
 
@@ -100,10 +103,15 @@ input:read-only{
     border:1px solid #000;
 }
 
-#rests{
+.info{
     float: right;
 }
 
 #transactions{
     float: left;
+}
+
+.current, .previous{
+    width: auto;
+    margin-top: 20px;
 }

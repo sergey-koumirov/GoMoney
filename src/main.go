@@ -12,6 +12,8 @@ import(
 
     "controllers"
     "models"
+    "utils"
+    "html/template"
 )
 
 func main() {
@@ -31,6 +33,7 @@ func main() {
     m.Use(render.Renderer(render.Options{
         Layout: "layout",
         Extensions: []string{".tmpl", ".html"},
+        Funcs: []template.FuncMap{{ "money": utils.RenderMoney, "float": utils.MoneyAsFloat }},
     }))
 
     //*** ROUTES ***

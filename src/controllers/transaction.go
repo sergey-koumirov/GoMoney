@@ -8,18 +8,26 @@ import (
     "models"
     "strconv"
     "time"
+    "github.com/jinzhu/now"
 )
 
 func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
     var transactions []models.Transaction
-    db.Preload("AccountFrom").Preload("AccountTo").Order("id desc").Find(&transactions)
+    db.Preload("AccountFrom").Preload("AccountTo").Order("date desc, id desc").Find(&transactions)
+
+    pt := now.New( time.Now().AddDate(0,-1,0) )
+
     r.HTML(
       200, "transactions/index",
       models.TransactionsIndex{
           T: transactions,
           Rests: models.BalanceRest(db),
-          CurrentIncome: models.IncomeForPeriod(db, time.Now().Format("2006-01")+"-01", time.Now().Format("2006-01")+"-31"),
-          CurrentExpense: models.ExpenseForPeriod(db, time.Now().Format("2006-01")+"-01", time.Now().Format("2006-01")+"-31"),
+          CurrentIncome: models.IncomeForPeriod(db, now.BeginningOfMonth().Format("2006-01-02"), now.EndOfMonth().Format("2006-01-02") ),
+          CurrentExpense: models.ExpenseForPeriod(db, now.BeginningOfMonth().Format("2006-01-02"), now.EndOfMonth().Format("2006-01-02") ),
+
+          PreviousIncome: models.IncomeForPeriod(db, pt.BeginningOfMonth().Format("2006-01-02"), pt.EndOfMonth().Format("2006-01-02") ),
+          PreviousExpense: models.ExpenseForPeriod(db, pt.BeginningOfMonth().Format("2006-01-02"), pt.EndOfMonth().Format("2006-01-02") ),
+
           CurrentMonth: time.Now().Month().String(),
           PreviousMonth: (time.Now().Month()-1).String(),
       },

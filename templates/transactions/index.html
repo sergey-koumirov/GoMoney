@@ -65,27 +65,27 @@
         <table class="list">
             <tr>
                 <th>{{.PreviousMonth}}</th>
-                <th>Expense</th>
+                <th>Income</th>
             </tr>
-            {{ range .Rests.Records}}
+            {{ range .PreviousIncome.Records}}
             <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
             {{ end }}
             <tr>
                 <th></th>
-                <th class="money">111.11</th>
+                <th class="money">{{money .PreviousIncome.Total}}</th>
             </tr>
         </table>
         <table class="list">
             <tr>
                 <th>{{.PreviousMonth}}</th>
-                <th>Income</th>
+                <th>Expense</th>
             </tr>
-            {{ range .Rests.Records}}
+            {{ range .PreviousExpense.Records}}
             <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
             {{ end }}
             <tr>
                 <th></th>
-                <th class="money">111.11</th>
+                <th class="money">{{money .PreviousExpense.Total}}</th>
             </tr>
         </table>
     </div>

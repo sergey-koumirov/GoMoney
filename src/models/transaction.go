@@ -28,6 +28,8 @@ type TransactionsIndex struct {
     Rests AccountsInfo
     CurrentIncome AccountsInfo
     CurrentExpense AccountsInfo
+    PreviousIncome AccountsInfo
+    PreviousExpense AccountsInfo
     CurrentMonth string
     PreviousMonth string
 }

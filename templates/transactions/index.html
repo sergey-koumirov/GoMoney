@@ -36,27 +36,27 @@
         <table class="list">
             <tr>
                 <th>{{.CurrentMonth}}</th>
-                <th>Expense</th>
+                <th>Income</th>
             </tr>
-            {{ range .Rests.Records}}
+            {{ range .CurrentIncome.Records}}
             <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
             {{ end }}
             <tr>
                 <th></th>
-                <th class="money">111.11</th>
+                <th class="money">{{money .CurrentIncome.Total}}</th>
             </tr>
         </table>
         <table class="list">
             <tr>
                 <th>{{.CurrentMonth}}</th>
-                <th>Income</th>
+                <th>Expense</th>
             </tr>
-            {{ range .Rests.Records}}
+            {{ range .CurrentExpense.Records}}
             <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
             {{ end }}
             <tr>
                 <th></th>
-                <th class="money">111.11</th>
+                <th class="money">{{money .CurrentExpense.Total}}</th>
             </tr>
         </table>
     </div>

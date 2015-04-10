@@ -18,6 +18,8 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
       models.TransactionsIndex{
           T: transactions,
           Rests: models.BalanceRest(db),
+          CurrentIncome: models.IncomeForPeriod(db, time.Now().Format("2006-01")+"-01", time.Now().Format("2006-01")+"-31"),
+          CurrentExpense: models.ExpenseForPeriod(db, time.Now().Format("2006-01")+"-01", time.Now().Format("2006-01")+"-31"),
           CurrentMonth: time.Now().Month().String(),
           PreviousMonth: (time.Now().Month()-1).String(),
       },

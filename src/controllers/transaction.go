@@ -12,7 +12,7 @@ import (
     "math"
 )
 
-const PER_PAGE = 5
+const PER_PAGE = 100
 
 func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
 

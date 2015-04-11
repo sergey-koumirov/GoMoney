@@ -21,7 +21,7 @@
     <select id="account_from_id" name="AccountFromID">
         <option>---</option>
         {{range .AccountList}}
-            <option {{if eq .ID $.T.AccountFromID }}selected{{end}} value="{{.ID}}">{{.Name}}</option>
+            <option {{if eq .ID $.T.AccountFromID }}selected{{end}} value="{{.ID}}">{{.Name}} ({{.Type}})</option>
         {{end}}
     </select>
 
@@ -31,7 +31,7 @@
     <select id="account_to_id" name="AccountToID">
         <option>---</option>
         {{range .AccountList}}
-            <option {{if eq .ID $.T.AccountToID }}selected{{end}} value="{{.ID}}">{{.Name}}</option>
+            <option {{if eq .ID $.T.AccountToID }}selected{{end}} value="{{.ID}}">{{.Name}} ({{.Type}})</option>
         {{end}}
     </select>
 

@@ -1,5 +1,6 @@
 body{
-    font-family: 'Courier New'
+    font-family: 'Courier New';
+    font-size: 12px;
 }
 
 hr {
@@ -23,6 +24,7 @@ table.list, td, th{
     border-color: #8C8;
     border-style: solid;
     border-width: 1px;
+    font-size: 12px;
 }
 
 table.list{

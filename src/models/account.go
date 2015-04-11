@@ -51,6 +51,7 @@ func IncomeForPeriod(db *gorm.DB, fromDate string, toDate string) AccountsInfo{
 	       "       ifnull( (select sum(t.amount_from) from transactions t where t.account_from_id = a.id and t.date >= ? and t.date <= ?),0) as Amount"+
 	       "  from accounts a"+
 	       "  where a.type = \"I\" "+
+	       "    and Amount > 0 "+
 	       "  order by Amount desc";
 	rows, error := db.Raw(sql, fromDate, toDate).Rows()
 	if(error != nil){
@@ -68,6 +69,7 @@ func ExpenseForPeriod(db *gorm.DB, fromDate string, toDate string) AccountsInfo{
 	"       ifnull( (select sum(t.amount_to) from transactions t where t.account_to_id = a.id and t.date >= ? and t.date <= ?),0) as Amount"+
 	"  from accounts a"+
 	"  where a.type = \"E\" "+
+	"    and Amount > 0 "+
 	"  order by Amount desc";
 	rows, error := db.Raw(sql, fromDate, toDate).Rows()
 	if(error != nil){

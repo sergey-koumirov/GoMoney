@@ -20,7 +20,8 @@ type Transaction struct {
 
 type TransactionForm struct {
     T Transaction
-    AccountList []Account
+    AccountFromList []Account
+    AccountToList []Account
 }
 
 type TransactionsIndex struct {

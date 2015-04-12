@@ -51,10 +51,13 @@ func GetTransaction(db *gorm.DB, params martini.Params, req *http.Request, r ren
     var transaction models.Transaction
     db.Find(&transaction, params["id"])
 
-    var accountList []models.Account
-    db.Order("name").Find(&accountList)
+    var accountFromList []models.Account
+    db.Where("type in (\"I\",\"B\")").Order("type, name").Find(&accountFromList)
 
-    formData := models.TransactionForm{ T: transaction, AccountList: accountList }
+    var accountToList []models.Account
+    db.Where("type in (\"E\",\"B\")").Order("type, name").Find(&accountToList)
+
+    formData := models.TransactionForm{ T: transaction, AccountFromList: accountFromList, AccountToList: accountToList }
 
     r.HTML(200, "transactions/edit", formData)
 }
@@ -63,10 +66,13 @@ func NewTransaction(db *gorm.DB, params martini.Params, req *http.Request, r ren
     transaction := models.Transaction{}
     transaction.Date = time.Now().Format("2006-01-02")
 
-    var accountList []models.Account
-    db.Order("name").Find(&accountList)
+    var accountFromList []models.Account
+    db.Where("type in (\"I\",\"B\")").Order("type, name").Find(&accountFromList)
 
-    formData := models.TransactionForm{ T: transaction, AccountList: accountList }
+    var accountToList []models.Account
+    db.Where("type in (\"E\",\"B\")").Order("type, name").Find(&accountToList)
+
+    formData := models.TransactionForm{ T: transaction, AccountFromList: accountFromList, AccountToList: accountToList }
 
     r.HTML(200, "transactions/new", formData)
 }

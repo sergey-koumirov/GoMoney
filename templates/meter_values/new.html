@@ -1,0 +1,11 @@
+{{template "transaction_scripts" .}}
+
+<h3><a href="/meter_values">Meter Values</a> &gt; New </h3>
+
+<form action="/meter_values/create" method="POST">
+
+    {{template "meter_value_fields" .}}
+
+    <input type="submit" value="Create"/>
+
+</form>

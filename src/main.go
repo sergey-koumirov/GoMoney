@@ -66,6 +66,24 @@ func main() {
         r.Get("/:id", controllers.GetTransaction)
     })
 
+    m.Get("/meters", controllers.GetMeters)
+    m.Group("/meters", func(r martini.Router) {
+        r.Get("/new", controllers.NewMeter)
+        r.Post("/create", binding.Bind(models.Meter{}), controllers.CreateMeter)
+        r.Post("/update/:id", binding.Bind(models.Meter{}), controllers.UpdateMeter)
+        r.Get("/delete/:id", controllers.DeleteMeter)
+        r.Get("/:id", controllers.GetMeter)
+    })
+
+    m.Get("/meter_values", controllers.GetMeterValues)
+    m.Group("/meter_values", func(r martini.Router) {
+        r.Get("/new", controllers.NewMeterValue)
+        r.Post("/create", binding.Bind(models.MeterValue{}), controllers.CreateMeterValue)
+        r.Post("/update/:id", binding.Bind(models.MeterValue{}), controllers.UpdateMeterValue)
+        r.Get("/delete/:id", controllers.DeleteMeterValue)
+        r.Get("/:id", controllers.GetMeterValue)
+    })
+
     m.RunOnAddr(":7000")
 
 }

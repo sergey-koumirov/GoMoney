@@ -1,0 +1,24 @@
+{{define "meter_value_fields"}}
+<fieldset>
+
+    <label for="meter_id">Meter</label>
+    <select id="meter_id" name="MeterID">
+        <option>---</option>
+        {{range .Meters}}
+        <option {{if eq .ID $.V.MeterID }}selected{{end}} value="{{.ID}}">{{.Name}} ({{.Number}})</option>
+        {{end}}
+    </select>
+
+
+    <br/>
+
+    <label for="date">Date</label>
+    <input type="text" id="date" name="Date" value="{{.V.Date}}"/>
+
+    <br/>
+
+    <label for="meter_value_value">Value</label>
+    <input type="text" id="meter_value_value" name="Value" value="{{.V.Value}}"/>
+
+</fieldset>
+{{end}}

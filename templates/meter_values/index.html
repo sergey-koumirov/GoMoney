@@ -1,0 +1,16 @@
+<h3>Meter Values</h3>
+
+<table class="list">
+    {{ range .}}
+        <tr>
+            <td><a href="/meter_values/{{.ID}}">{{.ID}}</a></td>
+            <td><a href="/meter_values/{{.ID}}">{{.Meter.Name}}</a></td>
+            <td><a href="/meter_values/{{.ID}}">{{.Value}}</a></td>
+
+            <td><a href="/meter_values/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
+        </tr>
+    {{ end }}
+</table>
+
+<br/>
+<a href="/meter_values/new">New</a>

@@ -7,7 +7,6 @@ import (
     "models"
     "strconv"
     "time"
-    "database/sql"
 )
 
 func GetMeters(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
@@ -74,19 +73,12 @@ func NewMeterValue(db *gorm.DB, params martini.Params, req *http.Request, r rend
 }
 
 func CreateMeterValue(meter_value models.MeterValue, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    tempValue, _ := strconv.ParseFloat(req.Form.Get("Value"), 64)
-    meter_value.Value = sql.NullFloat64{Float64: tempValue, Valid: true}
-
     db.Create(&meter_value)
     r.Redirect("/meter_values")
 }
 
 func UpdateMeterValue(meter_value models.MeterValue, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    tempID, _ := strconv.ParseInt(params["id"], 10, 64)
-    tempValue, _ := strconv.ParseFloat(req.Form.Get("Value"), 64)
-
-    meter_value.ID = sql.NullInt64{Int64: tempID, Valid: true}
-    meter_value.Value = sql.NullFloat64{Float64: tempValue, Valid: true}
+    meter_value.ID, _ = strconv.ParseInt(params["id"], 10, 64)
 
     db.Save(meter_value)
     r.Redirect("/meter_values")

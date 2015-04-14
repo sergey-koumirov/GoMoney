@@ -12,11 +12,17 @@ type Meter struct{
 }
 
 type MeterValue struct{
-    ID sql.NullInt64 `form:"ID"`
+    ID int64 `form:"ID"`
     MeterID int64 `form:"MeterID"`
     Meter Meter
-    Value sql.NullFloat64 `form:"Value"`
+    Value float64 `form:"Value"`
     Date string `form:"Date"`
+}
+
+type MeterValueTemp struct{
+    ID sql.NullInt64
+    MeterID int64
+    Value sql.NullFloat64
 }
 
 type MeterValueForm struct{
@@ -31,7 +37,7 @@ type MeterValuesIndex struct{
 
 type MeterValuesOnDate struct{
     Date string
-    Values []MeterValue
+    Values []MeterValueTemp
 }
 
 func MeterValuesOnDates(db *gorm.DB) []MeterValuesOnDate{
@@ -56,9 +62,9 @@ func MeterValuesOnDates(db *gorm.DB) []MeterValuesOnDate{
 
     for rows.Next() {
         item := MeterValuesOnDate{}
-        item.Values = make([]MeterValue, len(meters))
+        item.Values = make([]MeterValueTemp, len(meters))
         for i, _ := range item.Values {
-            item.Values[i] = MeterValue{}
+            item.Values[i] = MeterValueTemp{}
         }
 
         vals := make([]interface{}, len(meters) * 2 + 1)

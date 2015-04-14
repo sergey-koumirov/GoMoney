@@ -1,9 +1,13 @@
-<h3><a href="/meter_values">Meter Values</a> &gt; {{.V.ID.Int64}} </h3>
+<h3><a href="/meter_values">Meter Values</a> &gt; {{.V.ID}}</h3>
 
-<form action="/meter_values/update/{{.V.ID.Int64}}" method="POST">
+<form action="/meter_values/update/{{.V.ID}}" method="POST">
 
 	{{template "meter_value_fields" .}}
 
 	<input type="submit" value="Update"/>
 
 </form>
+<br/>
+<br/>
+<br/>
+<a href="/meter_values/delete/{{.V.ID}}" onclick="return confirm('Are you sure?')">Delete</a>

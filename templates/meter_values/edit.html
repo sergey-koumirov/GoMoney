@@ -1,6 +1,6 @@
-<h3><a href="/meter_values">Meter Values</a> &gt; {{.V.ID}} </h3>
+<h3><a href="/meter_values">Meter Values</a> &gt; {{.V.ID.Int64}} </h3>
 
-<form action="/meter_values/update/{{.V.ID}}" method="POST">
+<form action="/meter_values/update/{{.V.ID.Int64}}" method="POST">
 
 	{{template "meter_value_fields" .}}
 

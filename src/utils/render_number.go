@@ -39,6 +39,7 @@ of code, hence the snippet. Feel free to reuse as you wish.
 import (
     "math"
     "strconv"
+    "database/sql"
 )
 
 var renderFloatPrecisionMultipliers = [10]float64{
@@ -195,6 +196,14 @@ func RenderInteger(format string, n int) string {
 
 func RenderMoney(n int64) string {
     return RenderFloat( "# ###.##", float64(n) / 100.0 )
+}
+
+func RenderFloat3(n sql.NullFloat64) string {
+    if(n.Valid){
+        return RenderFloat( "# ###.###", n.Float64 )
+    }else{
+        return "---"
+    }
 }
 
 func MoneyAsFloat(n int64) float64 {

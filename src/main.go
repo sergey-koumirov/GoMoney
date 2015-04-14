@@ -33,7 +33,7 @@ func main() {
     m.Use(render.Renderer(render.Options{
         Layout: "layout",
         Extensions: []string{".tmpl", ".html"},
-        Funcs: []template.FuncMap{{ "money": utils.RenderMoney, "float": utils.MoneyAsFloat }},
+        Funcs: []template.FuncMap{{ "money": utils.RenderMoney, "float": utils.MoneyAsFloat, "format3": utils.RenderFloat3 }},
     }))
 
     //*** ROUTES ***

@@ -2,12 +2,12 @@ package controllers
 import (
     "github.com/go-martini/martini"
     "github.com/martini-contrib/render"
-//    "fmt"
     "net/http"
     "github.com/jinzhu/gorm"
     "models"
     "strconv"
     "time"
+    "database/sql"
 )
 
 func GetMeters(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
@@ -46,9 +46,10 @@ func DeleteMeter(db *gorm.DB, params martini.Params, req *http.Request, r render
 
 //Meter Values
 func GetMeterValues(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    var meter_values []models.MeterValue
-    db.Preload("Meter").Find(&meter_values)
-    r.HTML(200, "meter_values/index", meter_values)
+    var meters []models.Meter
+    db.Find(&meters)
+
+    r.HTML(200, "meter_values/index", models.MeterValuesIndex{D: models.MeterValuesOnDates(db), Meters: meters})
 }
 
 func GetMeterValue(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
@@ -64,20 +65,29 @@ func GetMeterValue(db *gorm.DB, params martini.Params, req *http.Request, r rend
 func NewMeterValue(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
     meterValue := models.MeterValue{}
     meterValue.Date = time.Now().Format("2006-01-02")
-
+    if(req.URL.Query().Get("meter_id") != ""){
+        meterValue.MeterID, _ = strconv.ParseInt(req.URL.Query().Get("meter_id"), 10, 64)
+    }
     var meters []models.Meter
     db.Find(&meters)
-
     r.HTML(200, "meter_values/new",  models.MeterValueForm{V: meterValue, Meters: meters})
 }
 
 func CreateMeterValue(meter_value models.MeterValue, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
+    tempValue, _ := strconv.ParseFloat(req.Form.Get("Value"), 64)
+    meter_value.Value = sql.NullFloat64{Float64: tempValue, Valid: true}
+
     db.Create(&meter_value)
     r.Redirect("/meter_values")
 }
 
 func UpdateMeterValue(meter_value models.MeterValue, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    meter_value.ID, _ = strconv.ParseInt(params["id"], 10, 64)
+    tempID, _ := strconv.ParseInt(params["id"], 10, 64)
+    tempValue, _ := strconv.ParseFloat(req.Form.Get("Value"), 64)
+
+    meter_value.ID = sql.NullInt64{Int64: tempID, Valid: true}
+    meter_value.Value = sql.NullFloat64{Float64: tempValue, Valid: true}
+
     db.Save(meter_value)
     r.Redirect("/meter_values")
 }

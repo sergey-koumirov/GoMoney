@@ -17,4 +17,8 @@ func main() {
 
     db.AutoMigrate(&models.Meter{})
     db.AutoMigrate(&models.MeterValue{})
+
+
+    fmt.Println( models.MeterValuesOnDates(&db) )
+
 }

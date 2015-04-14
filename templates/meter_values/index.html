@@ -1,13 +1,26 @@
 <h3>Meter Values</h3>
 
 <table class="list">
-    {{ range .}}
-        <tr>
-            <td><a href="/meter_values/{{.ID}}">{{.ID}}</a></td>
-            <td><a href="/meter_values/{{.ID}}">{{.Meter.Name}}</a></td>
-            <td><a href="/meter_values/{{.ID}}">{{.Value}}</a></td>
+    <tr>
+        <td></td>
+        {{ range .Meters}}
+            <td>{{.Name}} ({{.Number}})</td>
+        {{ end }}
+    </tr>
 
-            <td><a href="/meter_values/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
+
+    {{ range .D}}
+        <tr>
+            <td>{{.Date}}</td>
+            {{range .Values}}
+                <td class="money">
+                    {{ if eq .ID.Int64 0}}
+                        <a href="/meter_values/new?meter_id={{.MeterID}}">{{format3 .Value}}</a>
+                    {{ else}}
+                        <a href="/meter_values/{{.ID.Int64}}">{{format3 .Value}}</a>
+                    {{ end}}
+                </td>
+            {{end}}
         </tr>
     {{ end }}
 </table>

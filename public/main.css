@@ -44,6 +44,7 @@ table.list td, table.list th{
 
 table.list .money{
     text-align: right;
+    min-width: 65px;
 }
 
 
@@ -111,6 +112,7 @@ input:read-only{
 
 #transactions{
     float: left;
+    width: 60%;
 }
 
 .current, .previous{

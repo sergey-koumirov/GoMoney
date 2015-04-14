@@ -1,9 +1,4 @@
 templates
-
 expense report (group by month)
-
-backup
-
 exec sql
-
-import
+active/disabled account

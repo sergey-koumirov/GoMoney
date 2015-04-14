@@ -14,15 +14,22 @@ import(
     "models"
     "utils"
     "html/template"
+    "os"
+    "time"
 )
 
 func main() {
+    workFileName := "money_0.prod.db"
+
+    os.Link(workFileName, "./temp/"+workFileName+"."+time.Now().Format("2006-01-02"))
+
     //*** DB INIT ***
-    db, error := gorm.Open("sqlite3", "money_0.db")
+    db, error := gorm.Open("sqlite3", workFileName)
     if(error !=nil){
         fmt.Println(error)
     }
     defer db.Close()
+
     db.DB()
 
     dbi := &db

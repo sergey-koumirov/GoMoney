@@ -52,10 +52,10 @@ func GetTransaction(db *gorm.DB, params martini.Params, req *http.Request, r ren
     db.Find(&transaction, params["id"])
 
     var accountFromList []models.Account
-    db.Where("type in (\"I\",\"B\")").Order("type, name").Find(&accountFromList)
+    db.Where("type in (\"I\",\"B\") and hidden<>1").Order("type, name").Find(&accountFromList)
 
     var accountToList []models.Account
-    db.Where("type in (\"E\",\"B\")").Order("type, name").Find(&accountToList)
+    db.Where("type in (\"E\",\"B\") and hidden<>1").Order("type, name").Find(&accountToList)
 
     formData := models.TransactionForm{ T: transaction, AccountFromList: accountFromList, AccountToList: accountToList }
 
@@ -70,14 +70,14 @@ func NewTransaction(db *gorm.DB, params martini.Params, req *http.Request, r ren
     var accountToList []models.Account
 
     if(req.URL.Query().Get("type") == "E"){
-        db.Where("type in (\"B\")").Order("type, name").Find(&accountFromList)
-        db.Where("type in (\"E\")").Order("type, name").Find(&accountToList)
+        db.Where("type in (\"B\") and hidden<>1").Order("type, name").Find(&accountFromList)
+        db.Where("type in (\"E\") and hidden<>1").Order("type, name").Find(&accountToList)
     }else if(req.URL.Query().Get("type") == "I"){
-        db.Where("type in (\"I\")").Order("type, name").Find(&accountFromList)
-        db.Where("type in (\"B\")").Order("type, name").Find(&accountToList)
+        db.Where("type in (\"I\") and hidden<>1").Order("type, name").Find(&accountFromList)
+        db.Where("type in (\"B\") and hidden<>1").Order("type, name").Find(&accountToList)
     }else{
-        db.Where("type in (\"I\",\"B\")").Order("type, name").Find(&accountFromList)
-        db.Where("type in (\"E\",\"B\")").Order("type, name").Find(&accountToList)
+        db.Where("type in (\"I\",\"B\") and hidden<>1").Order("type, name").Find(&accountFromList)
+        db.Where("type in (\"E\",\"B\") and hidden<>1").Order("type, name").Find(&accountToList)
     }
 
 

@@ -15,10 +15,11 @@ func main() {
     defer db.Close()
     db.DB()
 
-    db.AutoMigrate(&models.Meter{})
-    db.AutoMigrate(&models.MeterValue{})
+    //db.AutoMigrate(&models.Meter{})
+    //db.AutoMigrate(&models.MeterValue{})
+    db.AutoMigrate(&models.Account{})
 
 
-    fmt.Println( models.MeterValuesOnDates(&db) )
+//    fmt.Println( models.MeterValuesOnDates(&db) )
 
 }

@@ -7,6 +7,7 @@
             <td><a href="/accounts/{{.ID}}">{{.Name}}</a></td>
             <td>{{.Currency.Code}}</td>
             <td>{{.Type}}</td>
+            <td>{{.Hidden}}</td>
             <td><a href="/accounts/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
         </tr>
     {{ end }}

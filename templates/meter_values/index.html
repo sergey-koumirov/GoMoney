@@ -10,12 +10,13 @@
 
 
     {{ range .D}}
+        {{$d := .Date}}
         <tr>
             <td>{{.Date}}</td>
             {{range .Values}}
                 <td class="money">
                     {{ if eq .ID.Int64 0}}
-                        <a href="/meter_values/new?meter_id={{.MeterID}}">{{format3 .Value}}</a>
+                        <a href="/meter_values/new?meter_id={{.MeterID}}&date={{$d}}">{{format3 .Value}}</a>
                     {{ else}}
                         <a href="/meter_values/{{.ID.Int64}}">{{format3 .Value}}</a>
                     {{ end}}

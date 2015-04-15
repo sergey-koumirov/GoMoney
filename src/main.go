@@ -21,8 +21,8 @@ import(
 func main() {
     workFileName := "money_0.prod.db"
 
-    os.Link(workFileName, "./temp/"+workFileName+"."+time.Now().Format("2006-01-02"))
-
+    error := os.Link(workFileName, "./temp/"+workFileName+"."+time.Now().Format("2006-01-02"))
+    if(error !=nil){ fmt.Println(error) }
     //*** DB INIT ***
     db, error := gorm.Open("sqlite3", workFileName)
     if(error !=nil){

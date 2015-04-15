@@ -63,7 +63,11 @@ func GetMeterValue(db *gorm.DB, params martini.Params, req *http.Request, r rend
 
 func NewMeterValue(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
     meterValue := models.MeterValue{}
-    meterValue.Date = time.Now().Format("2006-01-02")
+    if(req.URL.Query().Get("date") != ""){
+        meterValue.Date = req.URL.Query().Get("date")
+    }else{
+        meterValue.Date = time.Now().Format("2006-01-02")
+    }
     if(req.URL.Query().Get("meter_id") != ""){
         meterValue.MeterID, _ = strconv.ParseInt(req.URL.Query().Get("meter_id"), 10, 64)
     }

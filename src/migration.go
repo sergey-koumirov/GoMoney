@@ -10,7 +10,7 @@ import(
 
 func main() {
     //*** DB INIT ***
-    db, error := gorm.Open("sqlite3", "money_0.db")
+    db, error := gorm.Open("sqlite3", "money_0.prod.db")
     if(error !=nil){ fmt.Println(error) }
     defer db.Close()
     db.DB()

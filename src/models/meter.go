@@ -33,6 +33,8 @@ type MeterValueForm struct{
 type MeterValuesIndex struct{
     D []MeterValuesOnDate
     Meters []Meter
+    Prev MeterValuesOnDate
+    Current MeterValuesOnDate
 }
 
 type MeterValuesOnDate struct{
@@ -44,7 +46,7 @@ func MeterValuesOnDates(db *gorm.DB) []MeterValuesOnDate{
     result := []MeterValuesOnDate{}
 
     var meters []Meter
-    db.Order("id").Find(&meters)
+    db.Order("name").Find(&meters)
 
     joins := ""
     slct := ""

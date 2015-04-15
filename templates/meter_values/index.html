@@ -3,8 +3,32 @@
 <table class="list">
     <tr>
         <td></td>
+        <td>#</td>
+        <td>Prev</td>
+        <td>Curr</td>
+        <td>Diff</td>
+    </tr>
+    {{ range $index, $v := .Meters}}
+    {{ $p := index $.Prev.Values $index}}
+    {{ $c := index $.Current.Values $index}}
+    {{ $d := minus $c.Value $p.Value}}
+    <tr>
+        <td>{{.Name}}</td>
+        <td>{{.Number}}</td>
+        <td class="money">{{format3 $p.Value}}</td>
+        <td class="money">{{format3 $c.Value}}</td>
+        <td class="money">{{format64 $d}}</td>
+    </tr>
+    {{ end }}
+</table>
+
+<hr/>
+
+<table class="list">
+    <tr>
+        <td></td>
         {{ range .Meters}}
-            <td>{{.Name}} ({{.Number}})</td>
+            <td>{{.Name}} <br/> {{.Number}}</td>
         {{ end }}
     </tr>
 

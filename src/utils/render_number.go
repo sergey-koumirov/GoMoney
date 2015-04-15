@@ -206,6 +206,10 @@ func RenderFloat3(n sql.NullFloat64) string {
     }
 }
 
+func RenderFloat64(n float64) string {
+    return RenderFloat( "# ###.###", n )
+}
+
 func MoneyAsFloat(n int64) float64 {
     return float64(n) / 100.0
 }

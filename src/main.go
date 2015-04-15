@@ -16,6 +16,7 @@ import(
     "html/template"
     "os"
     "time"
+    "database/sql"
 )
 
 func main() {
@@ -40,7 +41,15 @@ func main() {
     m.Use(render.Renderer(render.Options{
         Layout: "layout",
         Extensions: []string{".tmpl", ".html"},
-        Funcs: []template.FuncMap{{ "money": utils.RenderMoney, "float": utils.MoneyAsFloat, "format3": utils.RenderFloat3 }},
+        Funcs: []template.FuncMap{{
+            "money": utils.RenderMoney,
+            "float": utils.MoneyAsFloat,
+            "format3": utils.RenderFloat3,
+            "format64": utils.RenderFloat64,
+            "minus": func(a, b sql.NullFloat64) float64 {
+                return a.Float64 - b.Float64
+            },
+        }},
     }))
 
     //*** ROUTES ***

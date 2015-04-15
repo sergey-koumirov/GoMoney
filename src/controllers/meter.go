@@ -11,7 +11,7 @@ import (
 
 func GetMeters(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
     var meters []models.Meter
-    db.Find(&meters)
+    db.Order("name").Find(&meters)
     r.HTML(200, "meters/index", meters)
 }
 
@@ -46,9 +46,11 @@ func DeleteMeter(db *gorm.DB, params martini.Params, req *http.Request, r render
 //Meter Values
 func GetMeterValues(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
     var meters []models.Meter
-    db.Find(&meters)
+    db.Order("name").Find(&meters)
 
-    r.HTML(200, "meter_values/index", models.MeterValuesIndex{D: models.MeterValuesOnDates(db), Meters: meters})
+    data := models.MeterValuesOnDates(db)
+
+    r.HTML(200, "meter_values/index", models.MeterValuesIndex{D: data, Meters: meters, Prev: data[1], Current: data[0]})
 }
 
 func GetMeterValue(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){

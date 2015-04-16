@@ -5,6 +5,12 @@
                 dateFormat: "yy-mm-dd",
                 firstDay: 1
             });
+
+            var f = "{{.FocusOn}}";
+            if(f != ""){
+                $("#"+f).focus().select();
+            }
+
         });
     </script>
 {{end}}

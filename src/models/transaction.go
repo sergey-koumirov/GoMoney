@@ -22,6 +22,7 @@ type TransactionForm struct {
     T Transaction
     AccountFromList []Account
     AccountToList []Account
+    FocusOn string
 }
 
 type TransactionsIndex struct {
@@ -33,9 +34,9 @@ type TransactionsIndex struct {
     PreviousExpense AccountsInfo
     CurrentMonth string
     PreviousMonth string
-
     Page int64
     TotalPages []byte
+    Templates []Template
 }
 
 func (t *Transaction) ParseMoney() {

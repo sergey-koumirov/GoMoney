@@ -2,7 +2,6 @@ package controllers
 import (
     "github.com/go-martini/martini"
     "github.com/martini-contrib/render"
-//    "fmt"
     "net/http"
     "github.com/jinzhu/gorm"
     "models"
@@ -27,6 +26,10 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
 
     totalPages := int64( math.Ceil( float64(totalRecords) / float64(PER_PAGE) ) )
 
+    var templates []models.Template
+    db.Order("id desc").Find(&templates)
+
+
     r.HTML(
       200, "transactions/index",
       models.TransactionsIndex{
@@ -43,6 +46,8 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
 
           Page: currentPage,
           TotalPages: make([]byte, totalPages),
+
+          Templates: templates,
       },
     );
 }
@@ -66,6 +71,17 @@ func NewTransaction(db *gorm.DB, params martini.Params, req *http.Request, r ren
     transaction := models.Transaction{}
     transaction.Date = time.Now().Format("2006-01-02")
 
+    template := models.Template{}
+
+
+
+    if(req.URL.Query().Get("template_id") != ""){
+        template_id, _ := strconv.ParseInt(req.URL.Query().Get("template_id"), 10, 64)
+        db.Find(&template, template_id)
+        copyFromTemplate(db, &transaction, template)
+    }
+
+
     var accountFromList []models.Account
     var accountToList []models.Account
 
@@ -81,7 +97,7 @@ func NewTransaction(db *gorm.DB, params martini.Params, req *http.Request, r ren
     }
 
 
-    formData := models.TransactionForm{ T: transaction, AccountFromList: accountFromList, AccountToList: accountToList }
+    formData := models.TransactionForm{ T: transaction, AccountFromList: accountFromList, AccountToList: accountToList, FocusOn: template.FocusOn}
 
     r.HTML(200, "transactions/new", formData)
 }
@@ -103,4 +119,11 @@ func DeleteTransaction(db *gorm.DB, params martini.Params, req *http.Request, r 
     id, _ := strconv.ParseInt(params["id"], 10, 64)
     db.Where("id = ?", id).Delete(models.Transaction{})
     r.Redirect("/transactions")
+}
+
+func copyFromTemplate(db *gorm.DB, t *models.Transaction, template models.Template){
+    t.AccountFromID = template.AccountFromID
+    t.AccountToID = template.AccountToID
+    t.AmountFrom = template.AmountFrom
+    t.AmountTo = template.AmountTo
 }

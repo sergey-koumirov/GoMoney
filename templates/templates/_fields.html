@@ -1,0 +1,38 @@
+{{define "template_fields"}}
+<fieldset>
+
+    <label for="title">Title</label>
+    <input type="text" id="title" name="Title" value="{{.T.Title}}"/>
+    <br/>
+
+
+    <label for="account_from_id">From</label>
+    <select id="account_from_id" name="AccountFromID">
+        <option>---</option>
+        {{range .AccountList}}
+            <option {{if eq .ID $.T.AccountFromID }}selected{{end}} value="{{.ID}}">{{.Name}} ({{.Type}})</option>
+        {{end}}
+    </select>
+
+    <br/>
+
+    <label for="account_to_id">To</label>
+    <select id="account_to_id" name="AccountToID">
+        <option>---</option>
+        {{range .AccountList}}
+            <option {{if eq .ID $.T.AccountToID }}selected{{end}} value="{{.ID}}">{{.Name}} ({{.Type}})</option>
+        {{end}}
+    </select>
+
+    <br/>
+
+    <label for="amount_from">Amount From</label>
+    <input type="number" id="amount_from" name="AmountFrom" value="{{float .T.AmountFrom}}" step="0.01"/>
+
+    <br/>
+
+    <label for="focus_on">Focus On</label>
+    <input type="text" id="focus_on" name="FocusOn" value="{{.T.FocusOn}}"/>
+
+</fieldset>
+{{end}}

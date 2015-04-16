@@ -1,0 +1,17 @@
+<h3>Templates</h3>
+
+<table class="list">
+    {{ range .}}
+    <tr>
+        <td><a href="/templates/{{.ID}}">{{.Title}}</a></td>
+        <td>{{.AccountFrom.Name}}</td>
+        <td class="money">{{money .AmountFrom}}</td>
+        <td>{{.AccountTo.Name}}</td>
+        <td>{{.FocusOn}}</td>
+        <td><a href="/templates/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
+    </tr>
+    {{ end }}
+</table>
+
+<br/>
+<a href="/templates/new">New</a>

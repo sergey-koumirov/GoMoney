@@ -17,7 +17,7 @@ func main() {
 
     //db.AutoMigrate(&models.Meter{})
     //db.AutoMigrate(&models.MeterValue{})
-    db.AutoMigrate(&models.Account{})
+    db.AutoMigrate(&models.Template{})
 
 
 //    fmt.Println( models.MeterValuesOnDates(&db) )

@@ -100,6 +100,15 @@ func main() {
         r.Get("/:id", controllers.GetMeterValue)
     })
 
+    m.Get("/templates", controllers.GetTemplates)
+    m.Group("/templates", func(r martini.Router) {
+        r.Get("/new", controllers.NewTemplate)
+        r.Post("/create", binding.Bind(models.Template{}), controllers.CreateTemplate)
+        r.Post("/update/:id", binding.Bind(models.Template{}), controllers.UpdateTemplate)
+        r.Get("/delete/:id", controllers.DeleteTemplate)
+        r.Get("/:id", controllers.GetTemplate)
+    })
+
     m.RunOnAddr(":7000")
 
 }

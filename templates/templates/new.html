@@ -1,0 +1,9 @@
+<h3><a href="/templates">Templates</a> &gt; New </h3>
+
+<form action="/templates/create" method="POST">
+
+    {{template "template_fields" .}}
+
+    <input type="submit" value="Create"/>
+
+</form>

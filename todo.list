@@ -1,4 +1,2 @@
-templates
 expense report (group by month)
 exec sql
-active/disabled account

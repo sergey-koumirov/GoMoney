@@ -13,12 +13,12 @@
 <div>
     <table id="transactions" class="list">
         {{ range .T}}
-            <tr>
+            <tr class="{{if eq $.CurrentDate .Date}}current{{end}}">
                 <td><a href="/transactions/{{.ID}}">{{.Date}}</a></td>
-                <td><a href="/transactions/{{.ID}}">{{.AccountFrom.Name}}</a></td>
-                <td class="money">{{money .AmountFrom}}</td>
+                <td>{{.AccountFrom.Name}}</td>
+                <td class="money {{.AccountFrom.Type}}{{.AccountTo.Type}}">{{money .AmountFrom}}</td>
 
-                <td><a href="/transactions/{{.ID}}">{{.AccountTo.Name}}</a></td>
+                <td>{{.AccountTo.Name}}</td>
                 <td>{{.Comment}}</td>
                 <td><a href="/transactions/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
             </tr>

@@ -35,16 +35,33 @@ table.list{
     display: inline;
 }
 
+table.list tr{
+    background-color: #CFC;
+}
+
+table.list tr.current{
+    background-color: #EFE;
+}
+
 table.list td, table.list th{
     margin: 0;
     padding: 4px;
     border-width: 1px 1px 0 0;
-    background-color: #CFC;
 }
 
 table.list .money{
     text-align: right;
     min-width: 65px;
+}
+
+table.list .BB{
+    color: #0000ff;
+    font-weight: bold;
+}
+
+table.list .IB{
+    color: #008000;
+    font-weight: bold;
 }
 
 

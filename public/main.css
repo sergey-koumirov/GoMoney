@@ -136,3 +136,7 @@ input:read-only{
     width: auto;
     margin-top: 20px;
 }
+
+.filter{
+    float: right;
+}

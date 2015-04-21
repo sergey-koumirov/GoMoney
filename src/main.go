@@ -108,6 +108,9 @@ func main() {
         r.Get("/:id", controllers.GetTemplate)
     })
 
+    m.Get("/reports", controllers.GetReportDateRange)
+
+
     m.RunOnAddr(":7000")
 
 }

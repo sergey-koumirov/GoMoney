@@ -7,27 +7,17 @@
     });
 </script>
 
-<h3>Transactions</h3>
+<h3>Date Range Report (From-To)</h3>
 
 
-<form class="filter" action="/reports">
-    <input type="textbox" class="date" value=""/>
-    <input type="textbox" class="date" value=""/>
+<form class="filter" action="/reports" method="get">
+    <input type="textbox" class="date" name="BeginDate" value="{{.BeginDate}}"/>
+    <input type="textbox" class="date" name="EndDate" value="{{.EndDate}}"/>
     <br/>
-    <select multiple="multiple" size="30">
-        <option value="1" selected>Option 1</option>
-        <option>Option 1</option>
-        <option>Option 1</option>
-        <option>Option 1</option>
-        <option>Option 1</option>
-        <option>Option 1</option>
-        <option>Option 1</option>
-        <option>Option 1</option>
-        <option>Option 1</option>
-        <option>Option 1</option>
-        <option>Option 1</option>
-        <option selected>Option 1</option>
-        <option selected>Option 1</option>
+    <select multiple="multiple" size="30" name="IDs">
+        {{range .AccountList}}
+        <option value="{{.ID}}">{{.Name}}</option>
+        {{end}}
     </select>
     <br/>
     <input type="submit" value="Filter"/>
@@ -35,73 +25,39 @@
 
 <div>
     <table id="transactions" class="list">
+        {{range $key, $value := .Sections}}
         <tr>
-            <td>Income:</td>
-            <td class="money"><b>123.00</b></td>
-            <td></td>
+            <td>{{$key}}</td>
+            <td class="money"><b>{{money $value.Total}}</b></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
         </tr>
+            {{range $k, $v := $value.AccountInfos}}
+            <tr>
+                <td></td>
+                <td></td>
+                <td>{{$v.AccountName}}</td>
+                <td class="money"><b>{{money $v.Total}}</b></td>
+                <td></td>
+                <td></td>
+            </tr>
 
+                {{range $sk, $sv := $v.D}}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="money">{{money $sv.Total}}</td>
+                    <td>{{$sv.AccountName}}</td>
+                </tr>
+                {{end}}
 
-        <tr>
-            <td></td>
-            <td></td>
-            <td>Salary</td>
-            <td class="money"><b>123.00</b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        {{ range .T}}
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="money {{.AccountFrom.Type}}{{.AccountTo.Type}}">{{money .AmountFrom}}</td>
-            <td><a href="/transactions/{{.ID}}">{{.Date}}</a></td>
-            <td>{{.AccountTo.Name}}</td>
-            <td>{{.Comment}}</td>
-        </tr>
-        {{ end }}
+            {{end}}
+        {{end}}
 
-        <tr>
-            <td></td>
-            <td></td>
-            <td>Other</td>
-            <td class="money"><b>123.00</b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-
-        <tr>
-            <td>Expense:</td>
-            <td class="money"><b>123.00</b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Balance:</td>
-            <td class="money"><b>123.00</b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-        <!--</tr>-->
     </table>
 </div>
 

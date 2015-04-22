@@ -12,6 +12,7 @@ type Account struct {
 	Currency Currency
 	CurrencyID int64 `form:"CurrencyID"`
 	Hidden int64 `form:"Hidden"`
+	Selected bool `sql:"-"`
 }
 
 type AccountForm struct {

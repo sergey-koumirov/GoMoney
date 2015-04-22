@@ -16,7 +16,7 @@
     <br/>
     <select multiple="multiple" size="30" name="IDs">
         {{range .AccountList}}
-        <option value="{{.ID}}">{{.Name}}</option>
+        <option value="{{.ID}}" {{if .Selected}}selected{{end}}>{{.Name}}</option>
         {{end}}
     </select>
     <br/>
@@ -34,24 +34,24 @@
             <td></td>
             <td></td>
         </tr>
-            {{range $k, $v := $value.AccountInfos}}
+            {{range $k, $v := $value.SubSections}}
             <tr>
                 <td></td>
                 <td></td>
-                <td>{{$v.AccountName}}</td>
+                <td>{{$v.Title}}</td>
                 <td class="money"><b>{{money $v.Total}}</b></td>
                 <td></td>
                 <td></td>
             </tr>
 
-                {{range $sk, $sv := $v.D}}
+                {{range $sk, $sv := $v.SubSections}}
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td class="money">{{money $sv.Total}}</td>
-                    <td>{{$sv.AccountName}}</td>
+                    <td>{{$sv.Title}}</td>
                 </tr>
                 {{end}}
 

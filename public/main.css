@@ -68,7 +68,7 @@ table.list .IB{
 form {  /* set width in form, not fieldset (still takes up more room w/ fieldset width */
   margin: 0;
   padding: 0;
-  width: 400px;
+  width: 500px;
 }
 
 form fieldset {

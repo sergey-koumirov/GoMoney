@@ -10,7 +10,8 @@ type DateRangeReport struct {
     Sections map[string]*SectionInfo
     BeginDate string
     EndDate string
-    AccountList []Account
+    AccountFromList []Account
+    AccountToList []Account
 }
 
 func FillAccountTypeSectionsInfo(ts []Transaction) map[string]*SectionInfo{

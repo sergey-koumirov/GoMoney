@@ -1,6 +1,7 @@
 package models
 import (
     "strconv"
+    "utils"
 )
 
 type Transaction struct {
@@ -42,11 +43,11 @@ type TransactionsIndex struct {
 
 func (t *Transaction) ParseMoney() {
     fAmountFrom, _ := strconv.ParseFloat(t.AmountFromStr, 64)
-    t.AmountFrom = int64( fAmountFrom * 100 )
+    t.AmountFrom = int64( utils.Round(fAmountFrom * 100, 0.5, 0) )
 
     fAmountTo, _ := strconv.ParseFloat(t.AmountToStr, 64)
     if fAmountTo == 0 {
         fAmountTo = fAmountFrom
     }
-    t.AmountTo = int64( fAmountTo * 100 )
+    t.AmountTo = int64( utils.Round(fAmountTo * 100, 0.5, 0) )
 }

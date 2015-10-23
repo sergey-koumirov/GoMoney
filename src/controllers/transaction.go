@@ -4,7 +4,7 @@ import (
     "github.com/martini-contrib/render"
     "net/http"
     "github.com/jinzhu/gorm"
-    "models"
+    "GoMoney/src/models"
     "strconv"
     "time"
     "github.com/jinzhu/now"

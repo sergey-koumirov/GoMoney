@@ -1,7 +1,7 @@
 package models
 import (
     "strconv"
-    "utils"
+    "GoMoney/src/utils"
 )
 
 type Transaction struct {

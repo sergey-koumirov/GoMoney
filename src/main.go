@@ -10,9 +10,9 @@ import(
 
     "fmt"
 
-    "controllers"
-    "models"
-    "utils"
+    controllers "GoMoney/src/controllers"
+    models "GoMoney/src/models"
+    utils "GoMoney/src/utils"
     "html/template"
     "time"
     "database/sql"

@@ -5,7 +5,7 @@ import (
 //    "fmt"
     "net/http"
     "github.com/jinzhu/gorm"
-    "models"
+    models "GoMoney/src/models"
     "strconv"
 )
 

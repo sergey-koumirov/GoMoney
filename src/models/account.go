@@ -23,6 +23,7 @@ type AccountForm struct {
 type AccountRecord struct {
 	AccountName string
 	Amount int64
+	Percent float64
 }
 
 type AccountsInfo struct {
@@ -80,6 +81,12 @@ func ExpenseForPeriod(db *gorm.DB, fromDate string, toDate string) AccountsInfo{
 
 	result := AccountsInfo{Records: []AccountRecord{}, Total: 0}
 	extract(&result, rows)
+
+	for index, record := range result.Records{
+		result.Records[index].Percent = 100.0 * float64(record.Amount)/float64(result.Total)
+	}
+
+
 	return result
 }
 

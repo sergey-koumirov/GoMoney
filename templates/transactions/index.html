@@ -72,7 +72,11 @@
                 <th>Expense</th>
             </tr>
             {{ range .CurrentExpense.Records}}
-            <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+            <tr>
+                <td>{{.AccountName}}</td>
+                <td class="money">{{money .Amount}}</td>
+                <td class="money">{{format64 .Percent}}</td>
+            </tr>
             {{ end }}
             <tr>
                 <th></th>

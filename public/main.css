@@ -129,7 +129,7 @@ input:read-only{
 
 #transactions{
     float: left;
-    width: 60%;
+    width: 50%;
 }
 
 .current, .previous{

@@ -39,6 +39,7 @@ type TransactionsIndex struct {
     Page int64
     TotalPages []byte
     Templates []Template
+    Alarms []string
 }
 
 func (t *Transaction) ParseMoney() {

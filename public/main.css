@@ -140,3 +140,7 @@ input:read-only{
 .filter{
     float: right;
 }
+
+.red{
+    color: red;
+}

@@ -23,7 +23,19 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
     var transactions []models.Transaction
     db.Preload("AccountFrom").Preload("AccountTo").Order("date desc, id desc").Offset(currentPage*PER_PAGE).Limit(PER_PAGE).Find(&transactions)
 
-    pt := now.New( time.Now().AddDate(0,-1,0) )
+
+    prevD := 1
+    prevM := time.Now().Month()
+    prevY := time.Now().Year()
+
+    if(prevM == 1){
+        prevM = 12
+        prevY = prevY - 1
+    }else{
+        prevM = prevM - 1
+    }
+
+    pt := now.New( time.Date(prevY,prevM,prevD,0,0,0,0,time.UTC) )
 
     totalPages := int64( math.Ceil( float64(totalRecords) / float64(PER_PAGE) ) )
 
@@ -36,7 +48,6 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
     alarmDate := time.Date(time.Now().Year(), time.Now().Month(), 20, 0, 0, 0, 0, time.UTC)
     var count int
     db.Model(models.MeterValue{}).Where("date > ?", alarmDate.Format("2006-01-02")).Count(&count)
-    fmt.Println(alarmDate,count )
     if( alarmDate.Before(time.Now()) && count < 5 ){
         alarms = append(alarms,  fmt.Sprintf("CHECK METER VALUES"))
     }

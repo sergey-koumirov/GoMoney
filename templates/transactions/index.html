@@ -73,6 +73,7 @@
             <tr>
                 <th>{{.CurrentMonth}}</th>
                 <th>Expense</th>
+                <th></th>
             </tr>
             {{ range .CurrentExpense.Records}}
             <tr>
@@ -84,6 +85,7 @@
             <tr>
                 <th></th>
                 <th class="money">{{money .CurrentExpense.Total}}</th>
+                <th></th>
             </tr>
         </table>
     </div>

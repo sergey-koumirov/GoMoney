@@ -52,6 +52,13 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
         alarms = append(alarms,  fmt.Sprintf("CHECK METER VALUES"))
     }
 
+    var prevMonth time.Month
+    if time.Now().Month()==1 {
+        prevMonth = time.December
+    }else{
+        prevMonth = time.Now().Month()-1
+    }
+
     r.HTML(
       200, "transactions/index",
       models.TransactionsIndex{
@@ -65,7 +72,7 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
 
           CurrentDate: time.Now().Format("2006-01-02"),
           CurrentMonth: time.Now().Month().String(),
-          PreviousMonth: (time.Now().Month()-1).String(),
+          PreviousMonth: prevMonth.String(),
 
           Page: currentPage,
           TotalPages: make([]byte, totalPages),

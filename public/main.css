@@ -125,6 +125,7 @@ input:read-only{
 
 .info{
     float: right;
+    width: 500px;
 }
 
 #transactions{

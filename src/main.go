@@ -21,7 +21,7 @@ import(
 func main() {
     workFileName := "money_0.prod.db"
 
-    error := utils.CopyFile(workFileName, "C:/HomeBuhBack/"+workFileName+"."+time.Now().Format("2006-01-02"))
+    error := utils.CopyFile(workFileName, "F:/GoMoneyBackup/"+workFileName+"."+time.Now().Format("2006-01-02"))
     if(error !=nil){ fmt.Println(error) }
     //*** DB INIT ***
     db, error := gorm.Open("sqlite3", workFileName)
@@ -32,7 +32,7 @@ func main() {
 
     db.DB()
 
-    dbi := &db
+    dbi := db
 
     //*** APP INIT ***
     m := martini.Classic()

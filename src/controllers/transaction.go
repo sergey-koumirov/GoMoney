@@ -21,7 +21,7 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
     db.Model(models.Transaction{}).Count(&totalRecords)
 
     var transactions []models.Transaction
-    db.Preload("AccountFrom").Preload("AccountTo").Order("date desc, id desc").Offset(currentPage*PER_PAGE).Limit(PER_PAGE).Find(&transactions)
+    db.Preload("AccountFrom").Preload("AccountTo").Order("date desc, id desc").Offset(int(currentPage)*PER_PAGE).Limit(PER_PAGE).Find(&transactions)
 
 
     prevD := 1

@@ -41,81 +41,127 @@
 </div>
 
 <div class="info">
-    <table id="rests" class="list">
+    <table>
         <tr>
-            <th>Balance</th>
-            <th>Rest</th>
+            <td colspan="2">
+                <table id="rests" class="list">
+                    <tr>
+                        <th>Balance</th>
+                        <th>Rest</th>
+                    </tr>
+                    {{ range .Rests.Records}}
+                    <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+                    {{ end }}
+                    <tr>
+                        <th></th>
+                        <th class="money">{{money .Rests.Total}}</th>
+                    </tr>
+                </table>
+            </td>
         </tr>
-        {{ range .Rests.Records}}
-            <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
-        {{ end }}
+
         <tr>
-            <th></th>
-            <th class="money">{{money .Rests.Total}}</th>
+            <td valign="top">
+                <table class="list">
+                    <tr>
+                        <th>{{.CurrentMonth}}</th>
+                        <th>Income</th>
+                    </tr>
+                    {{ range .CurrentIncome.Records}}
+                    <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+                    {{ end }}
+                    <tr>
+                        <th></th>
+                        <th class="money">{{money .CurrentIncome.Total}}</th>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="list">
+                    <tr>
+                        <th>{{.CurrentMonth}}</th>
+                        <th>Expense</th>
+                        <th></th>
+                    </tr>
+                    {{ range .CurrentExpense.Records}}
+                    <tr>
+                        <td>{{.AccountName}}</td>
+                        <td class="money">{{money .Amount}}</td>
+                        <td class="money">{{format64 .Percent}}</td>
+                    </tr>
+                    {{ end }}
+                    <tr>
+                        <th></th>
+                        <th class="money">{{money .CurrentExpense.Total}}</th>
+                        <th></th>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td valign="top">
+                <table class="list">
+                    <tr>
+                        <th>{{.PreviousMonth}}</th>
+                        <th>Income</th>
+                    </tr>
+                    {{ range .PreviousIncome.Records}}
+                    <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+                    {{ end }}
+                    <tr>
+                        <th></th>
+                        <th class="money">{{money .PreviousIncome.Total}}</th>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="list">
+                    <tr>
+                        <th>{{.PreviousMonth}}</th>
+                        <th>Expense</th>
+                    </tr>
+                    {{ range .PreviousExpense.Records}}
+                    <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+                    {{ end }}
+                    <tr>
+                        <th></th>
+                        <th class="money">{{money .PreviousExpense.Total}}</th>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <table class="list">
+                    <tr>
+                        <th>For Year</th>
+                        <th>Income</th>
+                    </tr>
+                    {{ range .YearIncome.Records}}
+                    <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+                    {{ end }}
+                    <tr>
+                        <th></th>
+                        <th class="money">{{money .YearIncome.Total}}</th>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="list">
+                    <tr>
+                        <th>For Year</th>
+                        <th>Expense</th>
+                    </tr>
+                    {{ range .YearExpense.Records}}
+                    <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+                    {{ end }}
+                    <tr>
+                        <th></th>
+                        <th class="money">{{money .YearExpense.Total}}</th>
+                    </tr>
+                </table>
+            </td>
         </tr>
     </table>
-
-    <div class="current">
-        <table class="list">
-            <tr>
-                <th>{{.CurrentMonth}}</th>
-                <th>Income</th>
-            </tr>
-            {{ range .CurrentIncome.Records}}
-            <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
-            {{ end }}
-            <tr>
-                <th></th>
-                <th class="money">{{money .CurrentIncome.Total}}</th>
-            </tr>
-        </table>
-        <table class="list">
-            <tr>
-                <th>{{.CurrentMonth}}</th>
-                <th>Expense</th>
-                <th></th>
-            </tr>
-            {{ range .CurrentExpense.Records}}
-            <tr>
-                <td>{{.AccountName}}</td>
-                <td class="money">{{money .Amount}}</td>
-                <td class="money">{{format64 .Percent}}</td>
-            </tr>
-            {{ end }}
-            <tr>
-                <th></th>
-                <th class="money">{{money .CurrentExpense.Total}}</th>
-                <th></th>
-            </tr>
-        </table>
-    </div>
-
-    <div class="current">
-        <table class="list">
-            <tr>
-                <th>{{.PreviousMonth}}</th>
-                <th>Income</th>
-            </tr>
-            {{ range .PreviousIncome.Records}}
-            <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
-            {{ end }}
-            <tr>
-                <th></th>
-                <th class="money">{{money .PreviousIncome.Total}}</th>
-            </tr>
-        </table>
-        <table class="list">
-            <tr>
-                <th>{{.PreviousMonth}}</th>
-                <th>Expense</th>
-            </tr>
-            {{ range .PreviousExpense.Records}}
-            <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
-            {{ end }}
-            <tr>
-                <th></th>
-                <th class="money">{{money .PreviousExpense.Total}}</th>
-            </tr>
-        </table>
-    </div>
 </div>

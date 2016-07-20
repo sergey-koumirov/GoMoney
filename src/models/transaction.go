@@ -33,6 +33,8 @@ type TransactionsIndex struct {
     CurrentExpense AccountsInfo
     PreviousIncome AccountsInfo
     PreviousExpense AccountsInfo
+    YearIncome AccountsInfo
+    YearExpense AccountsInfo
     CurrentDate string
     CurrentMonth string
     PreviousMonth string

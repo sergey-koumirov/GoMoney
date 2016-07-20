@@ -28,6 +28,8 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
     prevM := time.Now().Month()
     prevY := time.Now().Year()
 
+    sYear := now.New( time.Date(prevY-1,prevM,prevD,0,0,0,0,time.UTC) )
+
     if(prevM == 1){
         prevM = 12
         prevY = prevY - 1
@@ -69,6 +71,9 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
 
           PreviousIncome: models.IncomeForPeriod(db, pt.BeginningOfMonth().Format("2006-01-02"), pt.EndOfMonth().Format("2006-01-02") ),
           PreviousExpense: models.ExpenseForPeriod(db, pt.BeginningOfMonth().Format("2006-01-02"), pt.EndOfMonth().Format("2006-01-02") ),
+
+          YearIncome: models.IncomeForPeriod(db, sYear.BeginningOfMonth().Format("2006-01-02"), now.EndOfMonth().Format("2006-01-02") ),
+          YearExpense: models.ExpenseForPeriod(db, sYear.BeginningOfMonth().Format("2006-01-02"), now.EndOfMonth().Format("2006-01-02") ),
 
           CurrentDate: time.Now().Format("2006-01-02"),
           CurrentMonth: time.Now().Month().String(),

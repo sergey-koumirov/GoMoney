@@ -14,16 +14,25 @@
     <input type="textbox" class="date" name="BeginDate" value="{{.BeginDate}}"/>
     <input type="textbox" class="date" name="EndDate" value="{{.EndDate}}"/>
     <br/>
-    <select multiple="multiple" size="30" name="fIDs">
-        {{range .AccountFromList}}
-        <option value="{{.ID}}" {{if .Selected}}selected{{end}}>{{.Name}}</option>
-        {{end}}
-    </select>
-    <select multiple="multiple" size="30" name="tIDs">
-        {{range .AccountToList}}
-        <option value="{{.ID}}" {{if .Selected}}selected{{end}}>{{.Name}}</option>
-        {{end}}
-    </select>
+
+    <table>
+        <tr>
+            <td>
+                <select multiple="multiple" size="30" name="fIDs">
+                    {{range .AccountFromList}}
+                    <option value="{{.ID}}" {{if .Selected}}selected{{end}}>[{{.Type}}] {{.Name}}</option>
+                    {{end}}
+                </select>
+            </td>
+            <td>
+                <select multiple="multiple" size="30" name="tIDs">
+                    {{range .AccountToList}}
+                    <option value="{{.ID}}" {{if .Selected}}selected{{end}}>[{{.Type}}] {{.Name}}</option>
+                    {{end}}
+                </select>
+            </td>
+        </tr>
+    </table>
     <br/>
     <input type="submit" value="Filter"/>
 </form>

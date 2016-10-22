@@ -91,6 +91,7 @@ func main() {
     })
 
     m.Get("/meter_values", controllers.GetMeterValues)
+    m.Get("/meter_values/print_version", controllers.MeterValuesPrint)
     m.Group("/meter_values", func(r martini.Router) {
         r.Get("/new", controllers.NewMeterValue)
         r.Post("/create", binding.Bind(models.MeterValue{}), controllers.CreateMeterValue)

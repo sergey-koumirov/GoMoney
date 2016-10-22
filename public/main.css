@@ -48,7 +48,7 @@ table.list td, table.list th{
     border-width: 1px 1px 0 0;
 }
 
-table.list .money{
+table.list .money, table.print .money{
     text-align: right;
     min-width: 70px;
 }
@@ -143,4 +143,20 @@ input:read-only{
 
 .red{
     color: red;
+}
+
+table.print{
+   border-collapse: collapse;
+   font-weight: 500;
+}
+
+
+table.print td, table.print th{
+    margin: 0;
+    padding: 4px;
+    border-width: 1px 1px 0 0;
+}
+
+table.print td{
+    border: solid 1px #CCCCCC;
 }

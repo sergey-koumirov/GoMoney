@@ -1,0 +1,22 @@
+<h2></h2>
+<table class="print">
+    <tr>
+        <td><b>{{.MonthStr}}</b></td>
+        <td align="center">№</td>
+        <td align="center">Пред.</td>
+        <td align="center">Тек.</td>
+        <td align="center">Разница</td>
+    </tr>
+    {{ range $index, $v := .Meters}}
+    {{ $p := index $.Prev.Values $index}}
+    {{ $c := index $.Current.Values $index}}
+    {{ $d := minus $c.Value $p.Value}}
+    <tr>
+        <td>{{.Name}}</td>
+        <td>{{.Number}}</td>
+        <td class="money">{{format3 $p.Value}}</td>
+        <td class="money">{{format3 $c.Value}}</td>
+        <td class="money">{{format64 $d}}</td>
+    </tr>
+    {{ end }}
+</table>

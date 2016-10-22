@@ -7,6 +7,7 @@ import (
     models "GoMoney/src/models"
     "strconv"
     "time"
+    //"fmt"
 )
 
 func GetMeters(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
@@ -51,6 +52,37 @@ func GetMeterValues(db *gorm.DB, params martini.Params, req *http.Request, r ren
     data := models.MeterValuesOnDates(db)
 
     r.HTML(200, "meter_values/index", models.MeterValuesIndex{D: data, Meters: meters, Prev: data[1], Current: data[0]})
+}
+
+func MeterValuesPrint(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
+    var meters []models.Meter
+    db.Order("name").Find(&meters)
+    data := models.MeterValuesOnDates(db)
+    
+    layout := "2006-01-02"
+    str := data[0].Date
+    t, _ := time.Parse(layout, str)
+    
+    println( t.Format("Januar 2006") )
+    month := map[int]string{
+        1: "Январь",
+        2: "Февраль",
+        3: "Март",
+        4: "Апрель",
+        5: "Май",
+        6: "Июнь",
+        7: "Июль",
+        8: "Август",
+        9: "Сентябрь",
+        10: "Октябрь",
+        11: "Ноябрь",
+        12: "Декабрь",
+    }
+    
+    r.HTML(200, "meter_values/print_version",
+        models.MeterValuesIndex{D: data, Meters: meters, Prev: data[1], Current: data[0], MonthStr: strconv.Itoa(t.Year())+" "+month[int(t.Month())] },
+        render.HTMLOptions{Layout: "print"},
+    )
 }
 
 func GetMeterValue(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){

@@ -202,14 +202,14 @@ func RenderMoney(n int64) string {
 
 func RenderFloat3(n sql.NullFloat64) string {
     if(n.Valid){
-        return RenderFloat( "# ###.###", n.Float64 )
+        return RenderFloat( "# ###.#", n.Float64 )
     }else{
         return "---"
     }
 }
 
 func RenderFloat64(n float64) string {
-    return RenderFloat( "# ###.###", n )
+    return RenderFloat( "# ###.#", n )
 }
 
 func MoneyAsFloat(n int64) float64 {

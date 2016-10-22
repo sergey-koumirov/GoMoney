@@ -35,6 +35,7 @@ type MeterValuesIndex struct{
     Meters []Meter
     Prev MeterValuesOnDate
     Current MeterValuesOnDate
+    MonthStr string
 }
 
 type MeterValuesOnDate struct{

@@ -1,9 +1,10 @@
 <h3><a href="/meter_values">Meter Values</a> &gt; New </h3>
+<div class="container">
+    <form action="/meter_values/create" method="POST">
 
-<form action="/meter_values/create" method="POST">
+        {{template "meter_value_fields" .}}
 
-    {{template "meter_value_fields" .}}
+        <input class="btn btn-default" type="submit" value="Create"/>
 
-    <input type="submit" value="Create"/>
-
-</form>
+    </form>
+</div>

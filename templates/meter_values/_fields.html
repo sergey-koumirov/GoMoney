@@ -1,24 +1,25 @@
 {{define "meter_value_fields"}}
-<fieldset>
-
-    <label for="meter_id">Meter</label>
-    <select id="meter_id" name="MeterID">
-        <option>---</option>
-        {{range .Meters}}
-        <option {{if eq .ID $.V.MeterID }}selected{{end}} value="{{.ID}}">{{.Name}} ({{.Number}})</option>
-        {{end}}
-    </select>
 
 
-    <br/>
+    <div class="form-group">
+        <label for="meter_id">Meter</label>
+        <select id="meter_id" name="MeterID" class="form-control">
+            <option>---</option>
+            {{range .Meters}}
+            <option {{if eq .ID $.V.MeterID }}selected{{end}} value="{{.ID}}">{{.Name}} ({{.Number}})</option>
+            {{end}}
+        </select>
+    </div>
 
-    <label for="date">Date</label>
-    <input type="text" id="date" name="Date" value="{{.V.Date}}"/>
+    <div class="form-group">
+        <label for="date">Date</label>
+        <input type="text" id="date" name="Date" value="{{.V.Date}}" class="form-control">
+    </div>
 
-    <br/>
 
-    <label for="meter_value_value">Value</label>
-    <input type="text" id="meter_value_value" name="Value" value="{{.V.Value}}"/>
+    <div class="form-group">
+        <label for="meter_value_value">Value</label>
+        <input type="text" id="meter_value_value" name="Value" value="{{.V.Value}}" class="form-control">
+    </div>
 
-</fieldset>
 {{end}}

@@ -9,7 +9,7 @@ import (
     "time"
     "github.com/jinzhu/now"
     "math"
-    "fmt"
+//    "fmt"
 )
 
 const PER_PAGE = 200
@@ -47,12 +47,12 @@ func GetTransactions(db *gorm.DB, params martini.Params, req *http.Request, r re
 
     var alarms []string
 
-    alarmDate := time.Date(time.Now().Year(), time.Now().Month(), 20, 0, 0, 0, 0, time.UTC)
-    var count int
-    db.Model(models.MeterValue{}).Where("date > ?", alarmDate.Format("2006-01-02")).Count(&count)
-    if( alarmDate.Before(time.Now()) && count < 5 ){
-        alarms = append(alarms,  fmt.Sprintf("CHECK METER VALUES"))
-    }
+    //alarmDate := time.Date(time.Now().Year(), time.Now().Month(), 20, 0, 0, 0, 0, time.UTC)
+    //var count int
+    //db.Model(models.MeterValue{}).Where("date > ?", alarmDate.Format("2006-01-02")).Count(&count)
+    //if( alarmDate.Before(time.Now()) && count < 5 ){
+    //    alarms = append(alarms,  fmt.Sprintf("CHECK METER VALUES"))
+    //}
 
     var prevMonth time.Month
     if time.Now().Month()==1 {

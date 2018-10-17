@@ -1,9 +1,13 @@
+{{define "content"}}
+
 <h3><a href="/currencies">Currencies</a> &gt; New </h3>
 
-<form action="/currencies/create" method="POST">
+<form action="/currencies" method="POST">
 
     {{template "currency_fields" .}}
 
     <input type="submit" value="Create"/>
 
 </form>
+
+{{end}}

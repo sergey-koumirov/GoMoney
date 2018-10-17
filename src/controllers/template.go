@@ -1,67 +1,71 @@
 package controllers
+
 import (
-    "github.com/go-martini/martini"
-    "github.com/martini-contrib/render"
-//    "fmt"
-    "net/http"
-    "github.com/jinzhu/gorm"
-    "GoMoney/src/models"
-    "strconv"
-    "fmt"
+	"net/http"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sergey-koumirov/GoMoney/src/db"
+	"github.com/sergey-koumirov/GoMoney/src/models"
 )
 
-func GetTemplates(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
+func GetTemplates(c *gin.Context) {
 
-    var templates []models.Template
-    db.Preload("AccountFrom").Preload("AccountTo").Order("id desc").Find(&templates)
+	var templates []models.Template
+	db.DBI.Preload("AccountFrom").Preload("AccountTo").Order("id desc").Find(&templates)
 
-    r.HTML(
-      200, "templates/index",
-      templates,
-    );
+	c.HTML(200, "templates/index", templates)
 }
 
-func GetTemplate(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    var template models.Template
-    db.Find(&template, params["id"])
+func GetTemplate(c *gin.Context) {
+	var template models.Template
+	db.DBI.Find(&template, c.Param("id"))
 
-    var accountList []models.Account
-    db.Order("type, name").Find(&accountList)
+	var accountList []models.Account
+	db.DBI.Order("type, name").Find(&accountList)
 
-    formData := models.TemplateForm{ T: template, AccountList: accountList }
+	formData := models.TemplateForm{T: template, AccountList: accountList}
 
-    r.HTML(200, "templates/edit", formData)
+	c.HTML(200, "templates/edit", formData)
 }
 
-func NewTemplate(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    template := models.Template{}
+func NewTemplate(c *gin.Context) {
+	template := models.Template{}
 
-    var accountList []models.Account
-    db.Order("type, name").Find(&accountList)
+	var accountList []models.Account
+	db.DBI.Order("type, name").Find(&accountList)
 
-    formData := models.TemplateForm{ T: template, AccountList: accountList }
+	formData := models.TemplateForm{T: template, AccountList: accountList}
 
-    r.HTML(200, "templates/new", formData)
+	c.HTML(200, "templates/new", formData)
 }
 
-func CreateTemplate(template models.Template, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    template.ParseMoney()
-    db.Create(&template)
-    r.Redirect("/templates")
+func CreateTemplate(c *gin.Context) {
+	var template models.Template
+
+	if c.ShouldBind(&template) == nil {
+		template.ParseMoney()
+		db.DBI.Create(&template)
+	}
+
+	c.Redirect(http.StatusTemporaryRedirect, "/templates")
 }
 
-func UpdateTemplate(template models.Template, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    template.ID, _ = strconv.ParseInt(params["id"], 10, 64)
-    template.ParseMoney()
+func UpdateTemplate(c *gin.Context) {
+	var template models.Template
+	template.ID, _ = strconv.ParseInt(c.Param("id"), 10, 64)
+	db.DBI.Find(&template)
 
-    fmt.Println(template)
+	if c.ShouldBind(&template) == nil {
+		template.ParseMoney()
+		db.DBI.Save(&template)
+	}
 
-    db.Save(template)
-    r.Redirect("/templates")
+	c.Redirect(http.StatusTemporaryRedirect, "/templates")
 }
 
-func DeleteTemplate(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    id, _ := strconv.ParseInt(params["id"], 10, 64)
-    db.Where("id = ?", id).Delete(models.Template{})
-    r.Redirect("/templates")
+func DeleteTemplate(c *gin.Context) {
+	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+	db.DBI.Where("id = ?", id).Delete(models.Template{})
+	c.Redirect(http.StatusTemporaryRedirect, "/templates")
 }

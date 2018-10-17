@@ -1,3 +1,5 @@
+{{define "content"}}
+
 <h3>Transactions</h3>
 
 <a href="/transactions/new">New</a> |
@@ -5,7 +7,7 @@
 <a href="/transactions/new?type=I">Income</a> |
 
 {{range .Templates}}
-<a href="/transactions/new?template_id={{.ID}}">{{.Title}}</a> | 
+<a href="/transactions/new?template_id={{.ID}}">{{.Title}}</a> |
 {{end}}
 
 <br/>
@@ -165,3 +167,5 @@
         </tr>
     </table>
 </div>
+
+{{end}}

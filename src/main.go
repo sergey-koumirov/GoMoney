@@ -1,117 +1,94 @@
 package main
 
-import(
-    "github.com/go-martini/martini"
-    "github.com/martini-contrib/render"
-    "github.com/martini-contrib/binding"
+import (
+	gintemplate "github.com/foolin/gin-template"
+	"github.com/gin-gonic/gin"
 
-    "github.com/jinzhu/gorm"
-    _ "github.com/mattn/go-sqlite3"
+	"github.com/sergey-koumirov/GoMoney/src/controllers"
+	"github.com/sergey-koumirov/GoMoney/src/db"
+	"github.com/sergey-koumirov/GoMoney/src/utils"
 
-    "fmt"
+	_ "github.com/mattn/go-sqlite3"
 
-    controllers "GoMoney/src/controllers"
-    models "GoMoney/src/models"
-    utils "GoMoney/src/utils"
-    "html/template"
-    "time"
-    "database/sql"
+	"fmt"
+
+	"database/sql"
+	"html/template"
+	"time"
 )
 
 func main() {
-    workFileName := "money_0.prod.db"
+	workFileName := "money_0.prod.db"
 
-    error := utils.CopyFile(workFileName, "F:/GoMoneyBackup/"+workFileName+"."+time.Now().Format("2006-01-02"))
-    if(error !=nil){ fmt.Println(error) }
-    //*** DB INIT ***
-    db, error := gorm.Open("sqlite3", workFileName)
-    if(error !=nil){
-        fmt.Println(error)
-    }
-    defer db.Close()
+	e1 := utils.CopyFile(workFileName, "F:/GoMoneyBackup/"+workFileName+"."+time.Now().Format("2006-01-02"))
+	if e1 != nil {
+		fmt.Println(e1)
+	}
 
-    db.DB()
+	db.Connect(workFileName)
+	defer db.DBI.Close()
 
-    dbi := db
+	r := gin.Default()
 
-    //*** APP INIT ***
-    m := martini.Classic()
-    m.Map(dbi)
-    m.Use(render.Renderer(render.Options{
-        Layout: "layout",
-        Extensions: []string{".tmpl", ".html"},
-        Funcs: []template.FuncMap{{
-            "money": utils.RenderMoney,
-            "float": utils.MoneyAsFloat,
-            "format3": utils.RenderFloat3,
-            "format64": utils.RenderFloat64,
-            "minus": func(a, b sql.NullFloat64) float64 {
-                return a.Float64 - b.Float64
-            },
-        }},
-    }))
+	r.HTMLRender = gintemplate.New(gintemplate.TemplateConfig{
+		Root:      "templates",
+		Extension: ".html",
+		Master:    "layout",
+		Partials:  []string{"currencies/_fields"},
+		Funcs: template.FuncMap{
+			"money":    utils.RenderMoney,
+			"float":    utils.MoneyAsFloat,
+			"format3":  utils.RenderFloat3,
+			"format64": utils.RenderFloat64,
+			"minus": func(a, b sql.NullFloat64) float64 {
+				return a.Float64 - b.Float64
+			},
+		},
+		DisableCache: true,
+	})
 
-    //*** ROUTES ***
-    m.Get("/", controllers.GetTransactions)
+	r.GET("/", controllers.GetTransactions)
 
-    m.Get("/accounts", controllers.GetAccounts)
-    m.Group("/accounts", func(r martini.Router) {
-        r.Get("/new", controllers.NewAccount)
-        r.Post("/create", binding.Bind(models.Account{}), controllers.CreateAccount)
-        r.Post("/update/:id", binding.Bind(models.Account{}), controllers.UpdateAccount)
-        r.Get("/delete/:id", controllers.DeleteAccount)
-        r.Get("/:id", controllers.GetAccount)
-    })
+	r.GET("/accounts", controllers.GetAccounts)
+	r.GET("/accounts/new", controllers.NewAccount)
+	r.POST("/accounts", controllers.CreateAccount)
+	r.POST("/account/:id/update", controllers.UpdateAccount)
+	r.DELETE("/accounts/:id", controllers.DeleteAccount)
+	r.GET("/account/:id", controllers.GetAccount)
 
-    m.Get("/currencies", controllers.GetCurrencies)
-    m.Group("/currencies", func(r martini.Router) {
-        r.Get("/new", controllers.NewCurrency)
-        r.Post("/create", binding.Bind(models.Currency{}), controllers.CreateCurrency)
-        r.Post("/update/:id", binding.Bind(models.Currency{}), controllers.UpdateCurrency)
-        r.Get("/delete/:id", controllers.DeleteCurrency)
-        r.Get("/:id", controllers.GetCurrency)
-    })
+	r.GET("/currencies", controllers.GetCurrencies)
+	r.GET("/currencies/new", controllers.NewCurrency)
+	r.POST("/currencies", controllers.CreateCurrency)
+	r.POST("/currency/:id", controllers.UpdateCurrency)
+	r.GET("/currency/:id/delete", controllers.DeleteCurrency)
+	r.GET("/currency/:id", controllers.GetCurrency)
 
-    m.Get("/transactions", controllers.GetTransactions)
-    m.Group("/transactions", func(r martini.Router) {
-        r.Get("/new", controllers.NewTransaction)
-        r.Post("/create", binding.Bind(models.Transaction{}), controllers.CreateTransaction)
-        r.Post("/update/:id", binding.Bind(models.Transaction{}), controllers.UpdateTransaction)
-        r.Get("/delete/:id", controllers.DeleteTransaction)
-        r.Get("/:id", controllers.GetTransaction)
-    })
+	r.GET("/transactions", controllers.GetTransactions)
+	r.GET("/transactions/new", controllers.NewTransaction)
+	r.POST("/transactions", controllers.CreateTransaction)
+	r.POST("/transaction/:id", controllers.UpdateTransaction)
+	r.DELETE("/transaction/:id", controllers.DeleteTransaction)
+	r.GET("/transaction/:id", controllers.GetTransaction)
 
-    m.Get("/meters", controllers.GetMeters)
-    m.Group("/meters", func(r martini.Router) {
-        r.Get("/new", controllers.NewMeter)
-        r.Post("/create", binding.Bind(models.Meter{}), controllers.CreateMeter)
-        r.Post("/update/:id", binding.Bind(models.Meter{}), controllers.UpdateMeter)
-        r.Get("/delete/:id", controllers.DeleteMeter)
-        r.Get("/:id", controllers.GetMeter)
-    })
+	r.GET("/templates", controllers.GetTemplates)
+	r.GET("/templates/new", controllers.NewTemplate)
+	r.POST("/templates", controllers.CreateTemplate)
+	r.POST("/template/update/:id", controllers.UpdateTemplate)
+	r.DELETE("/template/:id", controllers.DeleteTemplate)
+	r.GET("/template/:id", controllers.GetTemplate)
 
-    m.Get("/meter_values", controllers.GetMeterValues)
-    m.Get("/meter_values/print_version", controllers.MeterValuesPrint)
-    m.Group("/meter_values", func(r martini.Router) {
-        r.Get("/new", controllers.NewMeterValue)
-        r.Post("/create", binding.Bind(models.MeterValue{}), controllers.CreateMeterValue)
-        r.Post("/update/:id", binding.Bind(models.MeterValue{}), controllers.UpdateMeterValue)
-        r.Get("/delete/:id", controllers.DeleteMeterValue)
-        r.Get("/:id", controllers.GetMeterValue)
-    })
+	r.GET("/reports", controllers.GetReportDateRange)
 
-    m.Get("/templates", controllers.GetTemplates)
-    m.Group("/templates", func(r martini.Router) {
-        r.Get("/new", controllers.NewTemplate)
-        r.Post("/create", binding.Bind(models.Template{}), controllers.CreateTemplate)
-        r.Post("/update/:id", binding.Bind(models.Template{}), controllers.UpdateTemplate)
-        r.Get("/delete/:id", controllers.DeleteTemplate)
-        r.Get("/:id", controllers.GetTemplate)
-    })
+	// templates := make([]string, 0)
+	// filepath.Walk("./templates", func(path string, info os.FileInfo, err error) error {
+	// 	if strings.HasSuffix(path, ".html") {
+	// 		templates = append(templates, path)
+	// 	}
+	// 	return nil
+	// })
+	// r.LoadHTMLFiles(templates...)
 
-    m.Get("/reports", controllers.GetReportDateRange)
+	r.Static("/s/", "./public")
 
-
-    m.RunOnAddr(":7000")
-
+	r.Run(":7000")
 }

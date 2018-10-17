@@ -1,44 +1,64 @@
 package controllers
+
 import (
-    "github.com/go-martini/martini"
-    "github.com/martini-contrib/render"
-//    "fmt"
-    "net/http"
-    "github.com/jinzhu/gorm"
-    models "GoMoney/src/models"
-    "strconv"
+
+	//    "fmt"
+
+	"fmt"
+	"net/http"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sergey-koumirov/GoMoney/src/db"
+	"github.com/sergey-koumirov/GoMoney/src/models"
 )
 
-func GetCurrencies(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    var currencies []models.Currency
-    db.Find(&currencies)
-    r.HTML(200, "currencies/index", currencies)
+func GetCurrencies(c *gin.Context) {
+	var currencies []models.Currency
+	db.DBI.Find(&currencies)
+	c.HTML(200, "currencies/index", currencies)
 }
 
-func GetCurrency(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    var currency models.Currency
-    db.Find(&currency, params["id"])
-    r.HTML(200, "currencies/edit", currency)
+func GetCurrency(c *gin.Context) {
+	var currency models.Currency
+	db.DBI.Find(&currency, c.Param("id"))
+	c.HTML(200, "currencies/edit", currency)
 }
 
-func NewCurrency(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    currency := models.Currency{}
-    r.HTML(200, "currencies/new", currency)
+func NewCurrency(c *gin.Context) {
+	currency := models.Currency{}
+	c.HTML(200, "currencies/new", currency)
 }
 
-func CreateCurrency(currency models.Currency, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    db.Create(&currency)
-    r.Redirect("/currencies")
+func CreateCurrency(c *gin.Context) {
+
+	var currency models.Currency
+
+	if c.ShouldBind(&currency) == nil {
+		db.DBI.Create(&currency)
+	}
+
+	c.Redirect(http.StatusSeeOther, "/currencies")
 }
 
-func UpdateCurrency(currency models.Currency, db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    currency.ID, _ = strconv.ParseInt(params["id"], 10, 64)
-    db.Save(currency)
-    r.Redirect("/currencies")
+func UpdateCurrency(c *gin.Context) {
+	var currency models.Currency
+	currency.ID, _ = strconv.ParseInt(c.Param("id"), 10, 64)
+	db.DBI.Find(&currency)
+
+	if c.ShouldBind(&currency) == nil {
+		db.DBI.Save(&currency)
+	}
+
+	c.Redirect(http.StatusSeeOther, "/currencies")
 }
 
-func DeleteCurrency(db *gorm.DB, params martini.Params, req *http.Request, r render.Render){
-    id, _ := strconv.ParseInt(params["id"], 10, 64)
-    db.Where("id = ?", id).Delete(models.Currency{})
-    r.Redirect("/currencies")
+func DeleteCurrency(c *gin.Context) {
+
+	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+	err := db.DBI.Delete(models.Currency{ID: id}).Error
+
+	fmt.Println("123", id, err)
+
+	c.Redirect(302, "/currencies")
 }

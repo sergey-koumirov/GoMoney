@@ -1,15 +1,19 @@
+{{define "content"}}
+
 <h3>Currencies</h3>
 
 <table class="list">
     {{ range .}}
         <tr>
-            <td><a href="/currencies/{{.ID}}">{{.ID}}</a></td>
-            <td><a href="/currencies/{{.ID}}">{{.Code}}</a></td>
-            <td><a href="/currencies/{{.ID}}">{{.Num}}</a></td>
-            <td><a href="/currencies/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
+            <td><a href="/currency/{{.ID}}">{{.ID}}</a></td>
+            <td><a href="/currency/{{.ID}}">{{.Code}}</a></td>
+            <td><a href="/currency/{{.ID}}">{{.Num}}</a></td>
+            <td><a href="/currency/{{.ID}}/delete">X</a></td>
         </tr>
     {{ end }}
 </table>
 
 <br/>
 <a href="/currencies/new">New</a>
+
+{{end}}

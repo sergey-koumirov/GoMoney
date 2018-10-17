@@ -1,9 +1,12 @@
+{{define "content"}}
+
 <h3><a href="/templates">Templates</a> &gt; {{.T.ID}} </h3>
 
-<form action="/templates/update/{{.T.ID}}" method="POST">
+<form action="/template/{{.T.ID}}" method="POST">
 
 	{{template "template_fields" .}}
 
 	<input type="submit" value="Update"/>
 
 </form>
+{{end}}

@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"fmt"
 	"math"
-	"net/http"
 	"strconv"
 	"time"
 
@@ -54,8 +52,6 @@ func GetTransactions(c *gin.Context) {
 	} else {
 		prevMonth = time.Now().Month() - 1
 	}
-
-	fmt.Println(transactions)
 
 	c.HTML(
 		200, "transactions/index",
@@ -138,7 +134,7 @@ func CreateTransaction(c *gin.Context) {
 		db.DBI.Create(&transaction)
 	}
 
-	c.Redirect(http.StatusTemporaryRedirect, "/transactions")
+	c.Redirect(302, "/transactions")
 }
 
 func UpdateTransaction(c *gin.Context) {
@@ -151,13 +147,13 @@ func UpdateTransaction(c *gin.Context) {
 		db.DBI.Save(&transaction)
 	}
 
-	c.Redirect(http.StatusTemporaryRedirect, "/transactions")
+	c.Redirect(302, "/transactions")
 }
 
 func DeleteTransaction(c *gin.Context) {
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 	db.DBI.Where("id = ?", id).Delete(models.Transaction{})
-	c.Redirect(http.StatusTemporaryRedirect, "/transactions")
+	c.Redirect(302, "/transactions")
 }
 
 func copyFromTemplate(db *gorm.DB, t *models.Transaction, template models.Template) {

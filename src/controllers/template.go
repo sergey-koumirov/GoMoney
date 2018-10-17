@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -48,7 +47,7 @@ func CreateTemplate(c *gin.Context) {
 		db.DBI.Create(&template)
 	}
 
-	c.Redirect(http.StatusTemporaryRedirect, "/templates")
+	c.Redirect(302, "/templates")
 }
 
 func UpdateTemplate(c *gin.Context) {
@@ -61,11 +60,11 @@ func UpdateTemplate(c *gin.Context) {
 		db.DBI.Save(&template)
 	}
 
-	c.Redirect(http.StatusTemporaryRedirect, "/templates")
+	c.Redirect(302, "/templates")
 }
 
 func DeleteTemplate(c *gin.Context) {
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 	db.DBI.Where("id = ?", id).Delete(models.Template{})
-	c.Redirect(http.StatusTemporaryRedirect, "/templates")
+	c.Redirect(302, "/templates")
 }

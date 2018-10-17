@@ -1,9 +1,13 @@
+{{define "content"}}
+
 <h3><a href="/templates">Templates</a> &gt; New </h3>
 
-<form action="/templates/create" method="POST">
+<form action="/templates" method="POST">
 
     {{template "template_fields" .}}
 
     <input type="submit" value="Create"/>
 
 </form>
+
+{{end}}

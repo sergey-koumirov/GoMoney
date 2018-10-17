@@ -1,17 +1,21 @@
+{{define "content"}}
+
 <h3>Accounts</h3>
 
 <table class="list">
     {{ range .}}
         <tr>
-            <td><a href="/accounts/{{.ID}}">{{.ID}}</a></td>
-            <td><a href="/accounts/{{.ID}}">{{.Name}}</a></td>
+            <td><a href="/account/{{.ID}}">{{.ID}}</a></td>
+            <td><a href="/account/{{.ID}}">{{.Name}}</a></td>
             <td>{{.Currency.Code}}</td>
             <td>{{.Type}}</td>
             <td>{{.Hidden}}</td>
-            <td><a href="/accounts/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
+            <td><a href="/account/{{.ID}}/delete">X</a></td>
         </tr>
     {{ end }}
 </table>
 
 <br/>
 <a href="/accounts/new">New</a>
+
+{{end}}

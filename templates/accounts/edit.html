@@ -1,9 +1,11 @@
+{{define "content"}}
 <h3><a href="/accounts">Accounts</a> &gt; {{.A.Name}} </h3>
 
-<form action="/accounts/update/{{.A.ID}}" method="POST">
+<form action="/account/{{.A.ID}}" method="POST">
 
 	{{template "account_fields" .}}
 
 	<input type="submit" value="Update"/>
 
 </form>
+{{end}}

@@ -21,11 +21,14 @@
             <tr class="{{if eq $.CurrentDate .Date}}current{{end}}">
                 <td width="80px"><a href="/transactions/{{.ID}}">{{.Date}}</a></td>
                 <td>{{.AccountFrom.Name}}</td>
-                <td class="money {{.AccountFrom.Type}}{{.AccountTo.Type}}">{{money .AmountFrom}}</td>
+                <td class="money {{.AccountFrom.Type}}{{.AccountTo.Type}}">
+                  {{money .AmountFrom}}
+                  {{if ne .AmountFrom .AmountTo}}/ {{money .AmountTo}}{{end}}
+                </td>
 
                 <td>{{.AccountTo.Name}}</td>
                 <td>{{.Comment}}</td>
-                <td><a href="/transactions/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
+                <td><a href="/transaction/{{.ID}}/delete" onclick="return confirm('Are you sure?')">X</a></td>
             </tr>
         {{ end }}
         <tr>
@@ -83,13 +86,13 @@
                     <tr>
                         <th>{{.CurrentMonth}}</th>
                         <th>Expense</th>
-                        <th></th>
+                        <th class="text-center"> %/% </th>
                     </tr>
                     {{ range .CurrentExpense.Records}}
                     <tr>
                         <td>{{.AccountName}}</td>
                         <td class="money">{{money .Amount}}</td>
-                        <td class="money">{{format64 .Percent}}</td>
+                        <td class="money">{{format64 .Percent}} / {{format64 .SumPercent}}</td>
                     </tr>
                     {{ end }}
                     <tr>

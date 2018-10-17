@@ -1,11 +1,15 @@
+{{define "content"}}
+
 {{template "transaction_scripts" .}}
 
 <h3><a href="/transactions">Transactions</a> &gt; {{.T.ID}} </h3>
 
-<form action="/transactions/update/{{.T.ID}}" method="POST">
+<form action="/transaction/{{.T.ID}}" method="POST">
 
 	{{template "transaction_fields" .}}
 
 	<input type="submit" value="Update"/>
 
 </form>
+
+{{end}}

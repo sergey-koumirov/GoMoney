@@ -4,7 +4,6 @@ import (
 
 	//    "fmt"
 
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -44,7 +43,7 @@ func CreateAccount(c *gin.Context) {
 		db.DBI.Create(&account)
 	}
 
-	c.Redirect(http.StatusTemporaryRedirect, "/accounts")
+	c.Redirect(302, "/accounts")
 }
 
 func UpdateAccount(c *gin.Context) {
@@ -56,11 +55,11 @@ func UpdateAccount(c *gin.Context) {
 		db.DBI.Save(&account)
 	}
 
-	c.Redirect(http.StatusTemporaryRedirect, "/accounts")
+	c.Redirect(302, "/accounts")
 }
 
 func DeleteAccount(c *gin.Context) {
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 	db.DBI.Where("id = ?", id).Delete(models.Account{})
-	c.Redirect(http.StatusTemporaryRedirect, "/accounts")
+	c.Redirect(302, "/accounts")
 }

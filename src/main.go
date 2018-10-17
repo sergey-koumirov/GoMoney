@@ -34,7 +34,12 @@ func main() {
 		Root:      "templates",
 		Extension: ".html",
 		Master:    "layout",
-		Partials:  []string{"currencies/_fields"},
+		Partials: []string{
+			"currencies/_fields",
+			"accounts/_fields",
+			"templates/_fields",
+			"transactions/_fields",
+		},
 		Funcs: template.FuncMap{
 			"money":    utils.RenderMoney,
 			"float":    utils.MoneyAsFloat,
@@ -52,8 +57,8 @@ func main() {
 	r.GET("/accounts", controllers.GetAccounts)
 	r.GET("/accounts/new", controllers.NewAccount)
 	r.POST("/accounts", controllers.CreateAccount)
-	r.POST("/account/:id/update", controllers.UpdateAccount)
-	r.DELETE("/accounts/:id", controllers.DeleteAccount)
+	r.POST("/account/:id", controllers.UpdateAccount)
+	r.GET("/account/:id/delete", controllers.DeleteAccount)
 	r.GET("/account/:id", controllers.GetAccount)
 
 	r.GET("/currencies", controllers.GetCurrencies)
@@ -67,26 +72,17 @@ func main() {
 	r.GET("/transactions/new", controllers.NewTransaction)
 	r.POST("/transactions", controllers.CreateTransaction)
 	r.POST("/transaction/:id", controllers.UpdateTransaction)
-	r.DELETE("/transaction/:id", controllers.DeleteTransaction)
+	r.GET("/transaction/:id/delete", controllers.DeleteTransaction)
 	r.GET("/transaction/:id", controllers.GetTransaction)
 
 	r.GET("/templates", controllers.GetTemplates)
 	r.GET("/templates/new", controllers.NewTemplate)
 	r.POST("/templates", controllers.CreateTemplate)
-	r.POST("/template/update/:id", controllers.UpdateTemplate)
-	r.DELETE("/template/:id", controllers.DeleteTemplate)
+	r.POST("/template/:id", controllers.UpdateTemplate)
+	r.GET("/template/:id/delete", controllers.DeleteTemplate)
 	r.GET("/template/:id", controllers.GetTemplate)
 
 	r.GET("/reports", controllers.GetReportDateRange)
-
-	// templates := make([]string, 0)
-	// filepath.Walk("./templates", func(path string, info os.FileInfo, err error) error {
-	// 	if strings.HasSuffix(path, ".html") {
-	// 		templates = append(templates, path)
-	// 	}
-	// 	return nil
-	// })
-	// r.LoadHTMLFiles(templates...)
 
 	r.Static("/s/", "./public")
 

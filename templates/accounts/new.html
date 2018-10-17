@@ -1,9 +1,11 @@
+{{define "content"}}
 <h3><a href="/accounts">Accounts</a> &gt; New </h3>
 
-<form action="/accounts/create" method="POST">
+<form action="/accounts" method="POST">
 
     {{template "account_fields" .}}
 
     <input type="submit" value="Create"/>
 
 </form>
+{{end}}

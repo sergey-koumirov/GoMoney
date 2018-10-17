@@ -31,8 +31,6 @@
         {{end}}
     </select>
 
-    <br/>
-
     <label for="account_to_id">To</label>
     <select id="account_to_id" name="AccountToID">
         <option>---</option>
@@ -45,7 +43,8 @@
 
     <label for="amount_from">Amount From</label>
     <input type="number" id="amount_from" name="AmountFrom" value="{{float .T.AmountFrom}}" step="0.01"/>
-
+    <label for="amount_to">></label>
+    <input type="number" id="amount_to" name="AmountTo" value="{{float .T.AmountTo}}" step="0.01"/>
     <br/>
 
     <label for="comment">Comment</label>

@@ -19,7 +19,7 @@
     <table id="transactions" class="list">
         {{ range .T}}
             <tr class="{{if eq $.CurrentDate .Date}}current{{end}}">
-                <td width="80px"><a href="/transactions/{{.ID}}">{{.Date}}</a></td>
+                <td width="80px"><a href="/transaction/{{.ID}}">{{.Date}}</a></td>
                 <td>{{.AccountFrom.Name}}</td>
                 <td class="money {{.AccountFrom.Type}}{{.AccountTo.Type}}">
                   {{money .AmountFrom}}

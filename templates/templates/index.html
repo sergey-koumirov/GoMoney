@@ -4,12 +4,12 @@
 <table class="list">
     {{ range .}}
     <tr>
-        <td><a href="/templates/{{.ID}}">{{.Title}}</a></td>
+        <td><a href="/template/{{.ID}}">{{.Title}}</a></td>
         <td>{{.AccountFrom.Name}}</td>
         <td class="money">{{money .AmountFrom}}</td>
         <td>{{.AccountTo.Name}}</td>
         <td>{{.FocusOn}}</td>
-        <td><a href="/templates/delete/{{.ID}}" onclick="return confirm('Are you sure?')">X</a></td>
+        <td><a href="/template/{{.ID}}/delete" onclick="return confirm('Are you sure?')">X</a></td>
     </tr>
     {{ end }}
 </table>

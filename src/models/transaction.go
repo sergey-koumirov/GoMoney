@@ -29,13 +29,13 @@ type TransactionForm struct {
 
 type TransactionsIndex struct {
 	T               []Transaction
-	Rests           AccountsInfo
-	CurrentIncome   AccountsInfo
-	CurrentExpense  AccountsInfo
-	PreviousIncome  AccountsInfo
-	PreviousExpense AccountsInfo
-	YearIncome      AccountsInfo
-	YearExpense     AccountsInfo
+	Rests           []AccountsInfo
+	CurrentIncome   []AccountsInfo
+	CurrentExpense  []AccountsInfo
+	PreviousIncome  []AccountsInfo
+	PreviousExpense []AccountsInfo
+	YearIncome      []AccountsInfo
+	YearExpense     []AccountsInfo
 	CurrentDate     string
 	CurrentMonth    string
 	PreviousMonth   string

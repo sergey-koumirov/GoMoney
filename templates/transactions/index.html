@@ -24,8 +24,11 @@
                   <td width="80px"><a href="/transaction/{{.ID}}">{{.Date}}</a></td>
                   <td>{{.AccountFrom.Name}}</td>
                   <td class="money {{.AccountFrom.Type}}{{.AccountTo.Type}}">
+                    <span class="gray">{{.AccountFrom.Currency.Code}}</span>
                     {{money .AmountFrom}}
-                    {{if ne .AmountFrom .AmountTo}}/ {{money .AmountTo}}{{end}}
+                    {{if ne .AccountFrom.Currency.ID .AccountTo.Currency.ID}}
+                      <span class="gray">/</span> {{money .AmountTo}} <span class="gray">{{.AccountTo.Currency.Code}}</span>
+                    {{end}}
                   </td>
 
                   <td>{{.AccountTo.Name}}</td>
@@ -50,13 +53,14 @@
     <div class="col-md-6">
 
       <div class="row">
-        <div class="col-md-12">
-          <table id="rests" class="list">
+        <div class="col-md-12 d-flex">
+          {{ range .Rests}}
+          <table class="list">
               <tr>
                   <th>Account</th>
                   <th>Rest</th>
               </tr>
-              {{ range .Rests.Records}}
+              {{ range .Records}}
               <tr>
                 <td>
                   <span class="gray">{{.CurrencyCode}}</span>
@@ -67,9 +71,10 @@
               {{ end }}
               <tr>
                   <th></th>
-                  <th class="money">{{money .Rests.Total}}</th>
+                  <th class="money">{{money .Total}}</th>
               </tr>
           </table>
+          {{ end }}
         </div>
       </div>
 
@@ -79,42 +84,50 @@
         </div>
       </div>
 
+
       <div class="row">
         <div class="col-md-4">
+          {{ range .CurrentIncome}}
           <table class="list">
               <tr>
-                  <th>{{.CurrentMonth}}</th>
+                  <th>{{$.CurrentMonth}}</th>
                   <th>Income</th>
               </tr>
-              {{ range .CurrentIncome.Records}}
-              <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+              {{ range .Records}}
+              <tr>
+                <td><span class="gray">{{.CurrencyCode}}</span> {{.AccountName}}</td>
+                <td class="money">{{money .Amount}}</td>
+              </tr>
               {{ end }}
               <tr>
                   <th></th>
-                  <th class="money">{{money .CurrentIncome.Total}}</th>
+                  <th class="money">{{money .Total}}</th>
               </tr>
           </table>
+          {{end}}
         </div>
         <div class="col-md-8">
+          {{ range .CurrentExpense}}
           <table class="list">
               <tr>
-                  <th>{{.CurrentMonth}}</th>
+                  <th>{{$.CurrentMonth}}</th>
                   <th>Expense</th>
                   <th class="text-center"> %/% </th>
               </tr>
-              {{ range .CurrentExpense.Records}}
+              {{ range .Records}}
               <tr>
-                  <td>{{.AccountName}}</td>
+                  <td><span class="gray">{{.CurrencyCode}}</span> {{.AccountName}}</td>
                   <td class="money">{{money .Amount}}</td>
                   <td class="money">{{format64 .Percent}} / {{format64 .SumPercent}}</td>
               </tr>
               {{ end }}
               <tr>
                   <th></th>
-                  <th class="money">{{money .CurrentExpense.Total}}</th>
+                  <th class="money">{{money .Total}}</th>
                   <th></th>
               </tr>
           </table>
+          {{end}}
         </div>
       </div>
 
@@ -126,40 +139,44 @@
 
       <div class="row">
         <div class="col-md-4">
+          {{ range .PreviousIncome}}
           <table class="list">
               <tr>
-                  <th>{{.PreviousMonth}}</th>
+                  <th>{{$.PreviousMonth}}</th>
                   <th>Income</th>
               </tr>
-              {{ range .PreviousIncome.Records}}
-              <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+              {{ range .Records}}
+              <tr><td><span class="gray">{{.CurrencyCode}}</span> {{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
               {{ end }}
               <tr>
                   <th></th>
-                  <th class="money">{{money .PreviousIncome.Total}}</th>
+                  <th class="money">{{money .Total}}</th>
               </tr>
           </table>
+          {{end}}
         </div>
         <div class="col-md-8">
+          {{ range .PreviousExpense}}
           <table class="list">
               <tr>
-                  <th>{{.PreviousMonth}}</th>
+                  <th>{{$.PreviousMonth}}</th>
                   <th>Expense</th>
                   <th></th>
               </tr>
-              {{ range .PreviousExpense.Records}}
+              {{ range .Records}}
               <tr>
-                <td>{{.AccountName}}</td>
+                <td><span class="gray">{{.CurrencyCode}}</span> {{.AccountName}}</td>
                 <td class="money">{{money .Amount}}</td>
                 <td class="money">{{format64 .SumPercent}}</td>
               </tr>
               {{ end }}
               <tr>
                   <th></th>
-                  <th class="money">{{money .PreviousExpense.Total}}</th>
+                  <th class="money">{{money .Total}}</th>
                   <th></th>
               </tr>
           </table>
+          {{end}}
         </div>
       </div>
 
@@ -171,41 +188,45 @@
 
       <div class="row">
         <div class="col-md-4">
+          {{ range .YearIncome}}
           <table class="list">
               <tr>
                   <th>For Year</th>
                   <th>Income</th>
               </tr>
-              {{ range .YearIncome.Records}}
+              {{ range .Records}}
               <tr>
-                <td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+                <td><span class="gray">{{.CurrencyCode}}</span> {{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
               {{ end }}
               <tr>
                   <th></th>
-                  <th class="money">{{money .YearIncome.Total}}</th>
+                  <th class="money">{{money .Total}}</th>
               </tr>
           </table>
+          {{end}}
         </div>
         <div class="col-md-8">
+          {{ range .YearExpense}}
           <table class="list">
               <tr>
                   <th>For Year</th>
                   <th>Expense</th>
                   <th></th>
               </tr>
-              {{ range .YearExpense.Records}}
+              {{ range .Records}}
               <tr>
-                <td>{{.AccountName}}</td>
+                <td><span class="gray">{{.CurrencyCode}}</span> {{.AccountName}}</td>
                 <td class="money">{{money .Amount}}</td>
                 <td class="money">{{format64 .SumPercent}}</td>
               </tr>
               {{ end }}
               <tr>
                   <th></th>
-                  <th class="money">{{money .YearExpense.Total}}</th>
+                  <th class="money">{{money .Total}}</th>
                   <th></th>
               </tr>
           </table>
+          {{end}}
         </div>
       </div>
 

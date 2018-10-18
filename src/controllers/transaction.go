@@ -21,7 +21,7 @@ func GetTransactions(c *gin.Context) {
 	db.DBI.Model(models.Transaction{}).Count(&totalRecords)
 
 	var transactions []models.Transaction
-	db.DBI.Preload("AccountFrom").Preload("AccountTo").Order("date desc, id desc").Offset(int(currentPage) * PER_PAGE).Limit(PER_PAGE).Find(&transactions)
+	db.DBI.Preload("AccountFrom.Currency").Preload("AccountTo.Currency").Order("date desc, id desc").Offset(int(currentPage) * PER_PAGE).Limit(PER_PAGE).Find(&transactions)
 
 	prevD := 1
 	prevM := time.Now().Month()

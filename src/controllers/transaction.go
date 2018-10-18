@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/jinzhu/now"
-
 	"github.com/sergey-koumirov/GoMoney/src/db"
 	"github.com/sergey-koumirov/GoMoney/src/models"
 )

@@ -1,20 +1,23 @@
 package controllers
 
 import (
-
-	//    "fmt"
-
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/now"
 	"github.com/sergey-koumirov/GoMoney/src/db"
 	"github.com/sergey-koumirov/GoMoney/src/models"
 )
 
 func GetAccounts(c *gin.Context) {
-	var accounts []models.Account
-	db.DBI.Preload("Currency").Find(&accounts)
-	c.HTML(200, "accounts/index", accounts)
+
+	D := time.Now().Day()
+	M := time.Now().Month()
+	Y := time.Now().Year()
+	yearAgo := now.New(time.Date(Y-1, M, D, 0, 0, 0, 0, time.UTC))
+
+	c.HTML(200, "accounts/index", models.AccountDescriptions(db.DBI, yearAgo.Format("2006-01-02")))
 }
 
 func GetAccount(c *gin.Context) {

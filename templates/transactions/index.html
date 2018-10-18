@@ -57,7 +57,13 @@
                   <th>Rest</th>
               </tr>
               {{ range .Rests.Records}}
-              <tr><td>{{.AccountName}}</td><td class="money">{{money .Amount}}</td></tr>
+              <tr>
+                <td>
+                  <span class="gray">{{.CurrencyCode}}</span>
+                  {{.AccountName}}
+                </td>
+                <td class="money">{{money .Amount}}</td>
+              </tr>
               {{ end }}
               <tr>
                   <th></th>

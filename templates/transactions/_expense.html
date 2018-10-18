@@ -4,8 +4,8 @@
     <tr>
         <td><span class="gray">{{.CurrencyCode}}</span> {{.AccountName}}</td>
         <td class="money">{{money .Amount}}</td>
-        <td class="money">{{format64 .Percent}}%</td>
-        <td class="money">{{format64 .SumPercent}}%</td>
+        <td class="text-right">{{format64 .Percent}}%</td>
+        <td class="text-right">{{format64 .SumPercent}}%</td>
     </tr>
     {{ end }}
     <tr>

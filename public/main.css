@@ -51,7 +51,7 @@ table.list td, table.list th{
 
 table.list .money, table.print .money{
     text-align: right;
-    min-width: 70px;
+    min-width: 80px;
 }
 
 table.list .BB{
@@ -110,6 +110,7 @@ table.print td{
 
 span.gray{
   color: #D0D0B0;
+  font-size: 8px;
 }
 
 .d-flex{

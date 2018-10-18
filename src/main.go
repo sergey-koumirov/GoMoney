@@ -1,20 +1,17 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
+	"html/template"
+	"time"
+
 	gintemplate "github.com/foolin/gin-template"
 	"github.com/gin-gonic/gin"
-
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/sergey-koumirov/GoMoney/src/controllers"
 	"github.com/sergey-koumirov/GoMoney/src/db"
 	"github.com/sergey-koumirov/GoMoney/src/utils"
-
-	_ "github.com/mattn/go-sqlite3"
-
-	"fmt"
-
-	"database/sql"
-	"html/template"
-	"time"
 )
 
 func main() {
@@ -39,6 +36,8 @@ func main() {
 			"accounts/_fields",
 			"templates/_fields",
 			"transactions/_fields",
+			"transactions/_income",
+			"transactions/_expense",
 		},
 		Funcs: template.FuncMap{
 			"money":    utils.RenderMoney,

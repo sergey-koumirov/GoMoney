@@ -1,0 +1,18 @@
+{{define "expense"}}
+<table class="list">
+    {{ range .Records}}
+    <tr>
+        <td><span class="gray">{{.CurrencyCode}}</span> {{.AccountName}}</td>
+        <td class="money">{{money .Amount}}</td>
+        <td class="money">{{format64 .Percent}}%</td>
+        <td class="money">{{format64 .SumPercent}}%</td>
+    </tr>
+    {{ end }}
+    <tr>
+        <th></th>
+        <th class="money">{{money .Total}}</th>
+        <th></th>
+        <th></th>
+    </tr>
+</table>
+{{end}}

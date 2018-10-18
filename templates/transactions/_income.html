@@ -1,0 +1,14 @@
+{{define "income"}}
+<table class="list">
+    {{ range .Records}}
+    <tr>
+      <td><span class="gray">{{.CurrencyCode}}</span> {{.AccountName}}</td>
+      <td class="money">{{money .Amount}}</td>
+    </tr>
+    {{ end }}
+    <tr>
+        <th></th>
+        <th class="money">{{money .Total}}</th>
+    </tr>
+</table>
+{{end}}

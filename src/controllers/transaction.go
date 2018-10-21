@@ -4,7 +4,8 @@ import (
 	"math"
 	"strconv"
 	"time"
-
+	"fmt"
+	// "io/ioutil"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/jinzhu/now"
@@ -128,9 +129,12 @@ func NewTransaction(c *gin.Context) {
 func CreateTransaction(c *gin.Context) {
 	var transaction models.Transaction
 
-	if c.ShouldBind(&transaction) == nil {
+  parse := c.ShouldBind(&transaction)
+	if parse == nil {
 		transaction.ParseMoney()
 		db.DBI.Create(&transaction)
+	}else{
+		fmt.Println("parse:", parse)
 	}
 
 	c.Redirect(302, "/transactions")

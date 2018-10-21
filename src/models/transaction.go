@@ -14,9 +14,9 @@ type Transaction struct {
 	AccountToID   int64  `form:"AccountToID"`
 	Date          string `form:"Date"`
 	AmountFrom    int64
-	AmountFromStr string `form:"AmountFrom" sql:"-"`
+	AmountFromStr string `form:"AmountFromStr" sql:"-"`
 	AmountTo      int64
-	AmountToStr   string `form:"AmountTo" sql:"-"`
+	AmountToStr   string `form:"AmountToStr" sql:"-"`
 	Comment       string `form:"Comment"`
 }
 

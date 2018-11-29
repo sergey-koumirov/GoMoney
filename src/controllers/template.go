@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"strconv"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sergey-koumirov/GoMoney/src/db"
 	"github.com/sergey-koumirov/GoMoney/src/models"
@@ -42,7 +41,9 @@ func NewTemplate(c *gin.Context) {
 func CreateTemplate(c *gin.Context) {
 	var template models.Template
 
-	if c.ShouldBind(&template) == nil {
+  parse := c.ShouldBind(&template)
+
+	if parse == nil {
 		template.ParseMoney()
 		db.DBI.Create(&template)
 	}

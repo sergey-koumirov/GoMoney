@@ -22,7 +22,7 @@
                   <td class="money {{.AccountFrom.Type}}{{.AccountTo.Type}}">
                     <span class="gray">{{.AccountFrom.Currency.Code}}</span>
                     {{money .AmountFrom}}
-                    {{if ne .AccountFrom.Currency.ID .AccountTo.Currency.ID}}
+                    {{if .HasDiff}}
                       <span class="gray">/</span> {{money .AmountTo}} <span class="gray">{{.AccountTo.Currency.Code}}</span>
                     {{end}}
                   </td>

@@ -9,72 +9,63 @@
     });
 </script>
 
-<h3>Date Range Report (From-To)</h3>
+<h3>Account Report</h3>
 
-
-<form class="filter" action="/reports" method="get">
-    <input type="textbox" class="date" name="BeginDate" value="{{.BeginDate}}"/>
-    <input type="textbox" class="date" name="EndDate" value="{{.EndDate}}"/>
-    <br/>
-
-    <table>
-        <tr>
-            <td>
-                <select multiple="multiple" size="30" name="fIDs">
-                    {{range .AccountFromList}}
-                    <option value="{{.ID}}" {{if .Selected}}selected{{end}}>[{{.Type}}] {{.Name}}</option>
-                    {{end}}
-                </select>
-            </td>
-            <td>
-                <select multiple="multiple" size="30" name="tIDs">
-                    {{range .AccountToList}}
-                    <option value="{{.ID}}" {{if .Selected}}selected{{end}}>[{{.Type}}] {{.Name}}</option>
-                    {{end}}
-                </select>
-            </td>
-        </tr>
-    </table>
-    <br/>
-    <input type="submit" value="Filter"/>
-</form>
-
-<div>
-    <table id="transactions" class="list">
-        {{range $key, $value := .Sections}}
-        <tr>
-            <td>{{$key}}</td>
-            <td class="money"><b>{{money $value.Total}}</b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-            {{range $k, $v := $value.SubSections}}
-            <tr>
-                <td></td>
-                <td></td>
-                <td>{{$v.Title}}</td>
-                <td class="money"><b>{{money $v.Total}}</b></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-                {{range $sk, $sv := $v.SubSections}}
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="money">{{money $sv.Total}}</td>
-                    <td>{{$sv.Title}}</td>
-                </tr>
+<div class="container row">
+    <div class="col-md-2">
+        <form class="filter" action="/reports" method="get">
+            <input type="textbox" class="form-control date" name="BeginDate" value="{{.BeginDate}}"/>
+            <input type="textbox" class="form-control date" name="EndDate" value="{{.EndDate}}"/>
+            <select class="form-control" name="AccountId">
+                {{range .AccountList}}
+                <option value="{{.ID}}" {{if eq .ID $.AccountId}}selected{{end}}>{{.Currency.Code}} [{{.Type}}] {{.Name}}</option>
                 {{end}}
-
+            </select>
+            <input type="submit" value="Show"/>
+        </form>        
+    </div>
+    <div class="col-md-5">
+        <table class="table table-bordered table-condensed">
+            {{range .InTransactions}}
+            <tr>
+                <td>{{.AccountFrom.Name}}</td>
+                <td class="text-right">{{money .AmountFrom}} {{.AccountFrom.Currency.Code}}</td>
+                <td class="text-right">{{money .AmountTo}} {{.AccountTo.Currency.Code}}</td>
+            </tr>
             {{end}}
-        {{end}}
+        </table>
 
-    </table>
+        <table class="table table-bordered table-condensed">
+            {{range .InMove}}
+            <tr>
+                <td>{{.CurrencyCode}}</td>
+                <td class="text-right">{{money .Amount}}</td>
+                <td class="text-right">{{format64 .Rate}}</td>
+            </tr>
+            {{end}}
+        </table>
+
+    </div>
+    <div class="col-md-5">
+        <table class="table table-bordered table-condensed">
+            {{range .OutTransactions}}
+            <tr>
+                <td class="text-right">{{money .AmountFrom}} {{.AccountFrom.Currency.Code}}</td>
+                <td class="text-right">{{money .AmountTo}} {{.AccountTo.Currency.Code}}</td>
+                <td>{{.AccountTo.Name}}</td>
+            </tr>
+            {{end}}
+        </table>
+        <table class="table table-bordered table-condensed">
+            {{range .OutMove}}
+            <tr>
+                <td class="text-right">{{format64 .Rate}}</td>
+                <td class="text-right">{{money .Amount}}</td>
+                <td>{{.CurrencyCode}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </div>
 </div>
 
 {{end}}

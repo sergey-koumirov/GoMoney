@@ -1,45 +1,78 @@
 package models
 
-type SectionInfo struct{
-    SubSections map[string]*SectionInfo
-    Title string
-    Total int64
-}
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type DateRangeReport struct {
-    Sections map[string]*SectionInfo
-    BeginDate string
-    EndDate string
-    AccountFromList []Account
-    AccountToList []Account
+	BeginDate       string
+	EndDate         string
+	AccountId       int64
+	AccountList     []Account
+	InTransactions  []Transaction
+	OutTransactions []Transaction
+	InMove          []CurrencyMoveInfo
+	OutMove         []CurrencyMoveInfo
 }
 
-func FillAccountTypeSectionsInfo(ts []Transaction) map[string]*SectionInfo{
-    result := map[string]*SectionInfo{}
-    for _, t := range ts {
-        code := t.AccountFrom.Type + t.AccountTo.Type
-        section, ok := result[code]
-        if !ok {
-            section = &SectionInfo{ SubSections: map[string]*SectionInfo{} }
-            result[code] = section
-        }
+type CurrencyMoveInfo struct {
+	CurrencyId   int64
+	CurrencyCode string
+	Amount       int64
+	Rate         float64
+}
 
-        accSection, ok := section.SubSections[string(t.AccountFromID)]
-        if !ok {
-            accSection = &SectionInfo{SubSections: map[string]*SectionInfo{}, Title: t.AccountFrom.Name}
-            section.SubSections[string(t.AccountFromID)] = accSection
-        }
+func GroupByCurrency(db *gorm.DB, from string, to string, accountId int64) ([]CurrencyMoveInfo, []CurrencyMoveInfo) {
+	resultTo := make([]CurrencyMoveInfo, 0)
+	sqlTo := `select c.id, c.code, sum(t.amount_from) as amount, sum(t.amount_from)*1.0/sum(t.amount_to) as rate
+	from transactions t, 
+		 accounts a, 
+		 currencies c
+	where t.account_to_id=?
+	  and t.date >= ? and t.date <= ?
+	  and a.id = t.account_from_id
+	  and c.id = a.currency_id
+	group by c.id, c.code
+	order by c.id, c.code`
 
-        trInfo, ok := accSection.SubSections[string(t.AccountToID)]
-        if !ok {
-            trInfo = &SectionInfo{Title: t.AccountTo.Name}
-            accSection.SubSections[string(t.AccountToID)] = trInfo
-        }
+	rowsTo, _ := db.Raw(sqlTo, accountId, from, to).Rows()
 
-        trInfo.Total += t.AmountFrom
-        accSection.Total += t.AmountFrom
-        section.Total = section.Total + t.AmountFrom
-    }
+	for rowsTo.Next() {
+		item := CurrencyMoveInfo{}
+		rowsTo.Scan(
+			&item.CurrencyId,
+			&item.CurrencyCode,
+			&item.Amount,
+			&item.Rate,
+		)
+		resultTo = append(resultTo, item)
+	}
 
-    return result
+	resultFrom := make([]CurrencyMoveInfo, 0)
+
+	sqlFrom := `select c.id, c.code, sum(t.amount_to) as amount, sum(t.amount_to)*1.0/sum(t.amount_from) as rate
+	from transactions t, 
+		 accounts a, 
+		 currencies c
+	where t.account_from_id=?
+	  and t.date >= ? and t.date <= ?
+	  and a.id = t.account_to_id
+	  and c.id = a.currency_id
+	group by c.id, c.code
+	order by c.id, c.code`
+
+	rowsFrom, _ := db.Raw(sqlFrom, accountId, from, to).Rows()
+
+	for rowsFrom.Next() {
+		item := CurrencyMoveInfo{}
+		rowsFrom.Scan(
+			&item.CurrencyId,
+			&item.CurrencyCode,
+			&item.Amount,
+			&item.Rate,
+		)
+		resultFrom = append(resultFrom, item)
+	}
+
+	return resultTo, resultFrom
 }

@@ -3,22 +3,23 @@ package controllers
 import (
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 
 	"github.com/sergey-koumirov/GoMoney/src/models"
 
-	"github.com/jinzhu/gorm"
 	"github.com/jinzhu/now"
 
 	"github.com/sergey-koumirov/GoMoney/src/db"
-	"github.com/sergey-koumirov/GoMoney/src/utils"
 )
 
 func GetReportDateRange(c *gin.Context) {
 
-	reportData := models.DateRangeReport{}
+	reportData := models.DateRangeReport{
+		InTransactions:  []models.Transaction{},
+		OutTransactions: []models.Transaction{},
+		AccountList:     []models.Account{},
+	}
 
 	if c.Query("BeginDate") != "" {
 		reportData.BeginDate = c.Query("BeginDate")
@@ -32,30 +33,33 @@ func GetReportDateRange(c *gin.Context) {
 		reportData.EndDate = now.EndOfMonth().Format("2006-01-02")
 	}
 
-	var fromIdsFilter, toIdsFilter string
-	reportData.AccountFromList, fromIdsFilter = prepareAccountList(db.DBI, "account_from_id", c.Request.URL.Query()["fIDs"])
-	reportData.AccountToList, toIdsFilter = prepareAccountList(db.DBI, "account_to_id", c.Request.URL.Query()["tIDs"])
+	if c.Query("AccountId") != "" {
+		reportData.AccountId, _ = strconv.ParseInt(c.Query("AccountId"), 10, 64)
+	} else {
+		reportData.AccountId = 0
+	}
 
-	var transactions []models.Transaction
-	db.DBI.Preload("AccountFrom").Preload("AccountTo").Where("date >= ? and date <= ? "+fromIdsFilter+toIdsFilter, reportData.BeginDate, reportData.EndDate).Order("date desc, id desc").Find(&transactions)
+	reportData.InMove, reportData.OutMove = models.GroupByCurrency(db.DBI, reportData.BeginDate, reportData.EndDate, reportData.AccountId)
 
-	reportData.Sections = models.FillAccountTypeSectionsInfo(transactions)
+	db.DBI.
+		Preload("AccountFrom.Currency").
+		Preload("AccountTo.Currency").
+		Where("date >= ? and date <= ? and account_to_id = ?", reportData.BeginDate, reportData.EndDate, reportData.AccountId).
+		Order("date desc, id desc").
+		Find(&(reportData.InTransactions))
+
+	db.DBI.
+		Preload("AccountFrom.Currency").
+		Preload("AccountTo.Currency").
+		Where("date >= ? and date <= ? and account_from_id = ?", reportData.BeginDate, reportData.EndDate, reportData.AccountId).
+		Order("date desc, id desc").
+		Find(&(reportData.OutTransactions))
+
+	db.DBI.
+		Preload("Currency").
+		Where("Type='B'").
+		Order("currency_id, id desc").
+		Find(&(reportData.AccountList))
 
 	c.HTML(http.StatusOK, "reports/index", reportData)
-}
-
-func prepareAccountList(db *gorm.DB, fieldName string, ids []string) ([]models.Account, string) {
-	var accountList []models.Account
-	db.Where("hidden<>1").Order("type, name").Find(&accountList)
-
-	idFilter := ""
-	if len(ids) > 0 {
-		idFilter = " and " + fieldName + " in (" + strings.Join(ids, ",") + ")" //todo add sanitize
-		for index, _ := range accountList {
-			if utils.Contains(ids, strconv.FormatInt(accountList[index].ID, 10)) {
-				accountList[index].Selected = true
-			}
-		}
-	}
-	return accountList, idFilter
 }

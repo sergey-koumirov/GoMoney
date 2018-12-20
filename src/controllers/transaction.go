@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"time"
-	"fmt"
+
 	// "io/ioutil"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -22,7 +23,17 @@ func GetTransactions(c *gin.Context) {
 	db.DBI.Model(models.Transaction{}).Count(&totalRecords)
 
 	var transactions []models.Transaction
-	db.DBI.Preload("AccountFrom.Currency").Preload("AccountTo.Currency").Order("date desc, id desc").Offset(int(currentPage) * PER_PAGE).Limit(PER_PAGE).Find(&transactions)
+	db.DBI.
+		Preload("AccountFrom.Currency").
+		Preload("AccountTo.Currency").
+		Order("date desc, id desc").
+		Offset(int(currentPage) * PER_PAGE).
+		Limit(PER_PAGE).
+		Find(&transactions)
+
+	for i := range transactions {
+		transactions[i].HasDiff = transactions[i].AccountFrom.CurrencyID != transactions[i].AccountTo.CurrencyID || transactions[i].AmountFrom != transactions[i].AmountTo
+	}
 
 	prevD := 1
 	prevM := time.Now().Month()
@@ -111,14 +122,14 @@ func NewTransaction(c *gin.Context) {
 	var accountToList []models.Account
 
 	if c.Query("type") == "E" {
-		db.DBI.Where("type in (\"B\") and hidden<>1").Order("type, name").Find(&accountFromList)
-		db.DBI.Where("type in (\"E\") and hidden<>1").Order("type, name").Find(&accountToList)
+		db.DBI.Preload("Currency").Where("type in (\"B\") and hidden<>1").Order("type, name").Find(&accountFromList)
+		db.DBI.Preload("Currency").Where("type in (\"E\") and hidden<>1").Order("type, name").Find(&accountToList)
 	} else if c.Query("type") == "I" {
-		db.DBI.Where("type in (\"I\") and hidden<>1").Order("type, name").Find(&accountFromList)
-		db.DBI.Where("type in (\"B\") and hidden<>1").Order("type, name").Find(&accountToList)
+		db.DBI.Preload("Currency").Where("type in (\"I\") and hidden<>1").Order("type, name").Find(&accountFromList)
+		db.DBI.Preload("Currency").Where("type in (\"B\") and hidden<>1").Order("type, name").Find(&accountToList)
 	} else {
-		db.DBI.Where("type in (\"I\",\"B\") and hidden<>1").Order("type, name").Find(&accountFromList)
-		db.DBI.Where("type in (\"E\",\"B\") and hidden<>1").Order("type, name").Find(&accountToList)
+		db.DBI.Preload("Currency").Where("type in (\"I\",\"B\") and hidden<>1").Order("type, name").Find(&accountFromList)
+		db.DBI.Preload("Currency").Where("type in (\"E\",\"B\") and hidden<>1").Order("type, name").Find(&accountToList)
 	}
 
 	formData := models.TransactionForm{T: transaction, AccountFromList: accountFromList, AccountToList: accountToList, FocusOn: template.FocusOn}
@@ -129,11 +140,11 @@ func NewTransaction(c *gin.Context) {
 func CreateTransaction(c *gin.Context) {
 	var transaction models.Transaction
 
-  parse := c.ShouldBind(&transaction)
+	parse := c.ShouldBind(&transaction)
 	if parse == nil {
 		transaction.ParseMoney()
 		db.DBI.Create(&transaction)
-	}else{
+	} else {
 		fmt.Println("parse:", parse)
 	}
 

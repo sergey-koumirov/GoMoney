@@ -18,6 +18,7 @@ type Transaction struct {
 	AmountTo      int64
 	AmountToStr   string `form:"AmountToStr" sql:"-"`
 	Comment       string `form:"Comment"`
+	HasDiff       bool   `sql:"-"`
 }
 
 type TransactionForm struct {
